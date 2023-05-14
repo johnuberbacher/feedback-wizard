@@ -1,0 +1,52 @@
+<template>
+  <div class="flex items-center">
+    <input
+      type="checkbox"
+      :name="name"
+      :id="description"
+      :value="value"
+      class="
+      relative 
+      h-6 
+      w-6 
+      cursor-pointer 
+      appearance-none 
+      rounded-md 
+      border-2 
+      border-solid 
+      border-gray-300 
+      after:absolute 
+      after:z-[1] 
+      after:block 
+      after:h-5 
+      after:w-5 
+      after:rounded-md 
+      after:content-[''] 
+      after:bg-white 
+      after:drop-shadow-md 
+      checked:border-cyan-600 
+      checked:after:absolute 
+      checked:after:left-1/2 
+      checked:after:top-1/2 
+      checked:after:h-[0.625rem]
+      checked:after:w-[0.625rem] 
+      checked:after:rounded-md 
+      checked:after:border-cyan-600 
+      checked:after:bg-cyan-600 
+      checked:after:content-[''] 
+      checked:after:[transform:translate(-50%,-50%)] 
+      checked:text-cyan-600
+      focus:shadow-none 
+      focus:outline-none 
+      focus:ring-0 
+      checked:focus:border-cyan-600"
+    />
+    <label
+      :for="description"
+      class="ml-2 cursor-pointer">{{ description }}
+    </label>
+  </div>
+</template>
+<script setup>
+const props = defineProps(["name", "description", "checked"]);
+</script>
