@@ -1,20 +1,20 @@
 <template>
   <div class="flex flex-col md:flex-row" v-if="state.survey">
     <aside
-      class="w-full md:w-[400px] bg-white md:border-r drop-shadow-lg">
+      class="w-full md:max-w-[360px] md:min-w-[360px] bg-white md:border-r drop-shadow-lg">
       <div
         class="h-full p-5 md:p-10 md:pt-32 overflow-y-auto bg-white flex flex-col justify-between">
-        <div>
-          <div class="font-semibold mb-4">{{ state.survey.creator ?? '🧙‍♂️ FeedbackWizard'}}</div>
-          <div class="font-semibold text-3xl mb-4">
+        <div class="w-ful flex flex-col gap-y-4">
+          <div class="font-semibold">{{ state.survey.creator ?? '🧙‍♂️ FeedbackWizard'}}</div>
+          <div class="font-bold text-3xl">
             {{ state.survey.title }}
           </div>
-          <div class="text-sm text-gray-400">
+          <div class="text-gray-400">
             {{ state.survey.description }}
           </div>
         </div>
-        <router-link to="/" class="hidden md:block text-gray-400 hover:text-cyan-500 font-medium text-base cursor-pointer mt-4">
-          Made&nbsp;with&nbsp;🧙‍♂️&nbsp;FeedbackWizard
+        <router-link to="/" class="hidden md:block text-gray-400 hover:text-cyan-500 text-base cursor-pointer mt-4">
+          Made&nbsp;with&nbsp;<span class="font-medium">🧙‍♂️&nbsp;FeedbackWizard</span>
         </router-link>
       </div>
     </aside>
@@ -45,38 +45,23 @@
           <div class="block font-semibold text-2xl text-gray-700">
             {{ state.survey.questions[state.currentQuestion].title }}
           </div>
-          <!-- Radio Question -->
-          <div
-            class="flex flex-col gap-y-4 min-h-[144px] my-2"
-            v-if="
-              state.survey.questions[state.currentQuestion].type === 'single'
-            "
-          >
+          <!-- Single Choice Question -->
+          <div class="flex flex-col min-h-[144px] my-2" v-if="state.survey.questions[state.currentQuestion].type === 'single'">
             <div
-              class=""
-              v-for="option in state.survey.questions[state.currentQuestion]
-                .options"
-              :key="option"
-            >
+              v-for="(option, index) in state.survey.questions[state.currentQuestion].options"
+              :key="option">
               <InputRadio
                 name="questionType"
+                :tabindex="index + 1"
                 :description="option"
               ></InputRadio>
             </div>
           </div>
-          <!-- Check Question -->
-          <div
-            class="flex flex-col gap-y-4 min-h-[144px] my-2"
-            v-if="
-              state.survey.questions[state.currentQuestion].type === 'multiple'
-            "
-          >
+          <!-- Multiple Choice Question -->
+          <div class="flex flex-col gap-y-4 min-h-[144px] my-2" v-if="state.survey.questions[state.currentQuestion].type === 'multiple'">
             <div
-              class=""
-              v-for="option in state.survey.questions[state.currentQuestion]
-                .options"
-              :key="option"
-            >
+              v-for="(option, index) in state.survey.questions[state.currentQuestion].options"
+              :key="option">
               <InputCheck
                 name="questionType"
                 id="single"
@@ -99,6 +84,7 @@
           <!-- Continue / Back Buttons -->
           <div class="flex flex-row items-stretch justify-start gap-4">
             <button
+            tabindex="-1"
               v-if="state.currentQuestion > 0"
               v-on:click="decrementQuestion()"
               class="bg-gray-300 hover:bg-gray-200 text-gray-700 font-medium py-3 px-6 rounded-lg"
@@ -106,6 +92,7 @@
               Back
             </button>
             <button
+              :tabindex="(state.survey.questions[state.currentQuestion].options?.length + 1)"
               v-on:click="incrementQuestion()"
               class="bg-cyan-600 hover:bg-cyan-500 text-white font-medium py-3 px-6 rounded-lg drop-shadow hover:drop-shadow-lg"
             >
@@ -113,8 +100,8 @@
             </button>
           </div>
         </div>
-        <router-link to="/" class="block md:hidden text-gray-400 hover:text-cyan-500 font-medium text-base cursor-pointer mt-24 block">
-          Made&nbsp;with&nbsp;🧙‍♂️&nbsp;FeedbackWizard
+        <router-link to="/" class="block md:hidden text-gray-400 hover:text-cyan-500 text-base cursor-pointer mt-24">
+          Made&nbsp;with&nbsp;<span class="font-medium">🧙‍♂️&nbsp;FeedbackWizard</span>
         </router-link>
       </div>
     </div>
@@ -159,6 +146,7 @@ onMounted(() => {
       if (doc.exists()) {
         state.survey = { ...doc.data(), id: doc.id };
         document.title =  state.survey.title
+        console.log(state.survey.questions[state.currentQuestion])
         if (state.survey.status == 'inactive') {
           router.push("/");
         }

@@ -15,8 +15,19 @@
     >
     <!-- Mobile Nav -->
     <div class="flex md:hidden flex-row gap-5 relative items-center justify-end">
-      <div @click="toggleMobileNav" style="" class="w-10 h-10 rounded-full bg-cyan-500 cursor-pointer"></div>
+      <div @click="toggleMobileNav" style="" class="w-10 h-10 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xl focus:ring-4 focus:outline-none focus:ring-cyan-300 cursor-pointer flex items-center justify-center shadow"><i class="ri-menu-3-line"></i></div>
       <div :class="{ hidden: !showMobileNav }" class="absolute z-10 top-12 left-auto right-0 w-auto bg-white drop-shadow-md rounded-lg p-6 flex flex-grow flex-col gap-4 items-start justify-center">
+        <router-link
+          v-if="!isLoggedIn"
+          to="/create-account"
+          class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-medium py-2 px-10 flex items-center justify-center text-center focus:ring-4 focus:outline-none focus:ring-cyan-300 rounded-lg cursor-pointer shadow"
+          >Create&nbsp;account</router-link>
+        <router-link
+          v-if="!isLoggedIn"
+          to="/login"
+          class="w-full bg-gray-50 border hover:bg-white text-gray-600 font-medium py-2 px-10 flex items-center justify-center text-center rounded-lg cursor-pointer">
+          Login
+        </router-link>
         <router-link
           v-if="isLoggedIn"
           to="/dashboard"
@@ -50,7 +61,7 @@
         v-if="!isLoggedIn"
         class="bg-cyan-600 hover:bg-cyan-500 text-white font-medium py-2 px-5 flex items-center justify-center text-center focus:ring-4 focus:outline-none focus:ring-cyan-300 rounded-lg cursor-pointer shadow"
       >
-        Create account
+        Create&nbsp;account
       </router-link>
       <router-link
         to="/login"

@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import HomeView from "../views/HomeView.vue";
-import EditSurvey from "../views/EditSurvey.vue";
-import Survey from "../views/Survey.vue";
-import DashboardView from "../views/DashboardView.vue";
-import LoginView from "../views/LoginView.vue";
-import CreateAccount from "../views/CreateAccount.vue";
+import HomeView from "../views/HomeView";
+import EditSurvey from "../views/EditSurvey";
+import Survey from "../views/Survey";
+import DashboardView from "../views/DashboardView";
+import LoginView from "../views/LoginView";
+import CreateAccount from "../views/CreateAccount";
 const routes = [
   {
     path: "/",

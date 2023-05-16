@@ -76,7 +76,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import Navbar from "@/components/Navbar.vue";
+import Navbar from "@/components/Navbar";
 
 const email = ref("");
 const password = ref("");

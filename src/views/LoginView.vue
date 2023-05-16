@@ -45,13 +45,13 @@
       >
         Login
       </button>
-      <button hover:text-cyan-500 cursor-pointer
+      <!--<button hover:text-cyan-500 cursor-pointer
         @click="signInWithGoogle"
         type="submit"
         class="w-full bg-gray-50 border hover:bg-white text-gray-600 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg py-3 px-6 text-center"
       >
         Sign in with Google
-      </button>
+      </button>-->
       <div class="text-center text-gray-400">Don't have an account yet? <router-link to="/create-account" class="text-cyan-600 hover:text-cyan-500 font-medium underline">Create one now.</router-link></div>
     </form>
   </div>
@@ -60,7 +60,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, } from "firebase/auth";
-import Navbar from "@/components/Navbar.vue";
+import Navbar from "@/components/Navbar";
 
 const email = ref("");
 const password = ref("");

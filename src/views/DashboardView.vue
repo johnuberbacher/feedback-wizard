@@ -2,42 +2,36 @@
   <div>
     <Navbar></Navbar>
     <div
-      class="w-full max-w-6xl mx-auto p-5 pt-10 md:p-10 flex flex-col gap-y-10"
-    >
+      class="w-full max-w-6xl mx-auto p-5 pt-10 md:p-10 flex flex-col gap-y-10">
       <div class="w-full flex flex-col gap-y-4">
         <div class="font-semibold text-3xl">Dashboard</div>
         <div class="flex flex-col md:flex-row gap-4 justify-stretch">
           <div
-            class="w-full bg-white drop-shadow-md rounded-lg p-6 flex flex-grow flex-col gap-4 items-start justify-center"
-          >
+            class="w-full bg-white drop-shadow-md rounded-lg p-6 flex flex-grow flex-col gap-4 items-start justify-center">
             <div class="text-sm text-gray-400">Surveys created this month</div>
             <div class="font-bold text-5xl">
               {{ getSurveysCreatedThisMonth(state.surveyList) }}
             </div>
           </div>
           <div
-            class="w-full bg-white drop-shadow-md rounded-lg p-6 flex flex-grow flex-col gap-4 items-start justify-center"
-          >
+            class="w-full bg-white drop-shadow-md rounded-lg p-6 flex flex-grow flex-col gap-4 items-start justify-center">
             <div class="text-sm text-gray-400">Survey views this month</div>
             <div class="font-bold text-5xl">0</div>
           </div>
           <div
-            class="w-full bg-white drop-shadow-md rounded-lg p-6 flex flex-grow flex-col gap-4 items-start justify-center"
-          >
+            class="w-full bg-white drop-shadow-md rounded-lg p-6 flex flex-grow flex-col gap-4 items-start justify-center">
             <div class="text-sm text-gray-400">Survey responses this month</div>
             <div class="font-bold text-5xl">0</div>
           </div>
           <div
-            class="w-full bg-white drop-shadow-md rounded-lg p-4 flex flex-grow flex-col items-center justify-center text-center"
-          >
+            class="w-full bg-white drop-shadow-md rounded-lg p-4 flex flex-grow flex-col items-center justify-center text-center">
             <div class="block font-semibold text-xl mb-1">Get feedback</div>
             <div class="text-xs text-gray-400 mb-3">
               Click the button below and start getting feedback in minutes.
             </div>
             <button
               @click="createNewSurveyModal()"
-              class="bg-cyan-600 hover:bg-cyan-500 focus:ring-4 focus:outline-none focus:ring-cyan-300 text-white font-medium w-full py-2 px-6 rounded-lg drop-shadow hover:drop-shadow-lg"
-            >
+              class="bg-cyan-600 hover:bg-cyan-500 focus:ring-4 focus:outline-none focus:ring-cyan-300 text-white font-medium w-full py-2 px-6 rounded-lg drop-shadow hover:drop-shadow-lg">
               Create survey
             </button>
           </div>
@@ -52,13 +46,11 @@
           v-for="(survey, index) in state.surveyList"
           :id="survey.id"
           :key="survey.id"
-          class="bg-white drop-shadow-md rounded-lg py-8 px-8 flex flex-col md:flex-row gap-y-4 items-start justify-between"
-        >
+          class="bg-white drop-shadow-md rounded-lg py-8 px-8 flex flex-col md:flex-row gap-y-4 items-start justify-between">
           <div class="flex flex-col items-start justify-start gap-y-2">
             <div
               v-if="survey.status == 'inactive'"
-              class="w-full flex flex-col gap-y-2 text-gray-700"
-            >
+              class="w-full flex flex-col gap-y-2 text-gray-700">
               <div class="block font-semibold text-xl">
                 {{ survey.title }}
               </div>
@@ -70,10 +62,9 @@
               v-if="survey.status == 'active'"
               target="_blank"
               :to="`/` + survey.id"
-              class="w-full flex flex-col gap-y-2 text-gray-700 hover:text-cyan-500"
-            >
+              class="w-full flex flex-col gap-y-2 text-gray-700 hover:text-cyan-500">
               <div class="block font-semibold text-xl">
-                <i class="ri-external-link-line"></i>&nbsp&nbsp{{
+                <i class="ri-external-link-line"></i>&nbsp;&nbsp;{{
                   survey.title
                 }}
               </div>
@@ -84,19 +75,16 @@
             <div class="flex flex-row items-start justify-start gap-2">
               <div
                 v-if="survey.status == 'active'"
-                class="w-auto py-2 px-3 rounded-lg font-semibold text-xs bg-lime-200 text-lime-800 capitalize"
-              >
+                class="w-auto py-2 px-3 rounded-lg font-semibold text-xs bg-lime-200 text-lime-800 capitalize">
                 {{ survey.status }}
               </div>
               <div
                 v-if="survey.status == 'inactive'"
-                class="w-auto py-2 px-3 rounded-lg font-semibold text-xs bg-red-100 text-red-600 capitalize"
-              >
+                class="w-auto py-2 px-3 rounded-lg font-semibold text-xs bg-red-100 text-red-600 capitalize">
                 {{ survey.status }}
               </div>
               <div
-                class="w-auto py-2 px-3 rounded-lg font-semibold text-xs bg-gray-100 text-gray-600 capitalize"
-              >
+                class="w-auto py-2 px-3 rounded-lg font-semibold text-xs bg-gray-100 text-gray-600 capitalize">
                 {{
                   survey.creationDate
                     ? getCreationDate(survey.creationDate)
@@ -108,8 +96,7 @@
           <div class="flex flex-row gap-2 md:ml-4">
             <router-link
               :to="`/edit/` + survey.id"
-              class="bg-gray-50 border hover:bg-white text-gray-600 font-medium py-2 px-6 rounded-lg"
-            >
+              class="bg-gray-50 border hover:bg-white text-gray-600 font-medium py-2 px-6 rounded-lg">
               Edit
             </router-link>
           </div>
@@ -119,8 +106,7 @@
     <CreateSurveyModal
       v-if="state.createSurveyModal"
       @createNewSurvey="createNewSurvey"
-      @createNewSurveyModal="createNewSurveyModal"
-    />
+      @createNewSurveyModal="createNewSurveyModal" />
   </div>
 </template>
 <script setup>
@@ -188,6 +174,7 @@ const getCreationDate = (date) => {
 };
 
 const createNewSurvey = async (value) => {
+  console.log(value);
   const chars =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   const documentID = [...Array(20)]
