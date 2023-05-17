@@ -2,9 +2,12 @@
   <div class="flex items-center">
     <input
       type="checkbox"
-      :name="name"
-      :id="description"
-      :value="value"
+      :placeholder="props.placeholder"
+      :name="props.name"
+      :id="props.value"
+      :value="props.value"
+      v-model="props.model"
+      :tabindex="props.tabindex"
       class="
       relative 
       h-6 
@@ -41,12 +44,11 @@
       focus:ring-0 
       checked:focus:border-cyan-600"
     />
-    <label
-      :for="description"
-      class="ml-2 cursor-pointer">{{ description }}
+    <label :for="props.value" class="w-full py-2 pl-3 cursor-pointer"
+      >{{ props.label }}
     </label>
   </div>
 </template>
 <script setup>
-const props = defineProps(["name", "description", "checked"]);
+const props = defineProps(["label", "model", "value", "name", "tabindex"]);
 </script>

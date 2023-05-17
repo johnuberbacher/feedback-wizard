@@ -58,10 +58,10 @@
                 {{ survey.description }}
               </div>
             </div>
-            <router-link
+            <a
               v-if="survey.status == 'active'"
               target="_blank"
-              :to="`/` + survey.id"
+              :href="publicPath + survey.id"
               class="w-full flex flex-col gap-y-2 text-gray-700 hover:text-cyan-500">
               <div class="block font-semibold text-xl">
                 <i class="ri-external-link-line"></i>&nbsp;&nbsp;{{
@@ -71,7 +71,7 @@
               <div class="text-sm text-gray-400">
                 {{ survey.description }}
               </div>
-            </router-link>
+            </a>
             <div class="flex flex-row items-start justify-start gap-2">
               <div
                 v-if="survey.status == 'active'"
@@ -124,6 +124,7 @@ import CreateSurveyModal from "@/components/modals/CreateSurvey.vue";
 
 const db = getFirestore(fb);
 const fbRef = collection(db, "surveys");
+const publicPath = process.env.VUE_APP_PUBLIC_PATH;
 
 const state = reactive({
   surveyList: [],
@@ -131,6 +132,7 @@ const state = reactive({
 });
 
 const fetchData = async () => {
+  console.log(publicPath)
   const fbDocs = await getDocs(fbRef);
   const docdata = fbDocs.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 

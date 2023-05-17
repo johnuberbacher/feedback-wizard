@@ -34,9 +34,9 @@
             <i class="ri-delete-bin-line"></i>
           </button>
           <button
-            @click="copyTextToClipboard(location + '/' + state.survey.id)"
+            @click="copyTextToClipboard(location + publicPath + state.survey.id)"
             class="bg-gray-50 border hover:bg-white text-gray-600 font-medium rounded-lg py-3 pl-6 pr-14 relative truncate">
-            {{ location + "/" + state.survey.id }}
+            {{ location + publicPath + state.survey.id }}
             <i
               class="font-semibold ml-4 ri-file-copy-line absolute right-[24px]"></i>
           </button>
@@ -192,6 +192,7 @@ const route = useRoute();
 const currentRoute = route.params.id;
 const router = useRouter();
 const location = window.location.origin;
+const publicPath = process.env.VUE_APP_PUBLIC_PATH;
 const showModal = ref(false);
 const tempQuestion = ref({
   questionTitle: "",
@@ -227,6 +228,8 @@ const saveQuestion = (index) => {
 const updateSurvey = async () => {
   const docRef = doc(db, "surveys", currentRoute);
   try {
+      await updateDoc(docRef, { ...nav });
+      const docRef = doc(db, "surveys", nav.id);
     await updateDoc(docRef, { pageCount: 1000 });
     fetchData();
   } catch (error) {

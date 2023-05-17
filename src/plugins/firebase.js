@@ -6,13 +6,13 @@ import { getAnalytics } from "firebase/analytics";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyDvkFD5kj4y1WOxe5vsyXVVhyxvnqjRXuY",
-    authDomain: "feedback-wizard.firebaseapp.com",
-    projectId: "feedback-wizard",
-    storageBucket: "feedback-wizard.appspot.com",
-    messagingSenderId: "240727461487",
-    appId: "1:240727461487:web:e168c3c32af3710f43c79a",
-    measurementId: "G-4C4V12Q0HN"
+    apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
+    authDomain: process.env.VUE_APP_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.VUE_APP_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.VUE_APP_FIREBASE_STORAGE,
+    messagingSenderId: process.env.VUE_APP_FIREBASE_SENDER_ID,
+    appId: process.env.VUE_APP_FIREBASE_APP_ID,
+    measurementId:process.env.VUE_APP_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase

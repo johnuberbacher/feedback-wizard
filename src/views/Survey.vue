@@ -51,22 +51,24 @@
               v-for="(option, index) in state.survey.questions[state.currentQuestion].options"
               :key="option">
               <InputRadio
-                name="questionType"
-                :tabindex="index + 1"
-                :description="option"
-              ></InputRadio>
+                model="3"
+                :label="option"
+                :name="state.survey.questions[state.currentQuestion]"
+                :value="option"
+                :tabindex="1 + 1"></InputRadio>
             </div>
           </div>
           <!-- Multiple Choice Question -->
-          <div class="flex flex-col gap-y-4 min-h-[144px] my-2" v-if="state.survey.questions[state.currentQuestion].type === 'multiple'">
+          <div class="flex flex-col min-h-[144px] my-2" v-if="state.survey.questions[state.currentQuestion].type === 'multiple'">
             <div
               v-for="(option, index) in state.survey.questions[state.currentQuestion].options"
               :key="option">
               <InputCheck
-                name="questionType"
-                id="single"
-                :description="option"
-              ></InputCheck>
+                model="4"
+                :label="option"
+                :name="state.survey.questions[state.currentQuestion]"
+                :value="option"
+                :tabindex="1 + 1"></InputCheck>
             </div>
           </div>
           <!-- Text Question -->
@@ -80,6 +82,10 @@
               class="block p-2.5 w-full drop-shadow text-gray-900 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 focus:drop-shadow-lg"
               placeholder="Write your thoughts here..."
             ></InputTextArea>
+          </div>
+          <!-- Empty -->
+          <div v-else>
+            Empty
           </div>
           <!-- Continue / Back Buttons -->
           <div class="flex flex-row items-stretch justify-start gap-4">
