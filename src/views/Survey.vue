@@ -83,10 +83,6 @@
               placeholder="Write your thoughts here..."
             ></InputTextArea>
           </div>
-          <!-- Empty -->
-          <div v-else>
-            Empty
-          </div>
           <!-- Continue / Back Buttons -->
           <div class="flex flex-row items-stretch justify-start gap-4">
             <button
