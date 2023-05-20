@@ -17,18 +17,18 @@
     <div class="flex md:hidden flex-row gap-5 relative items-center justify-end">
       <div @click="toggleMobileNav" style="" class="w-10 h-10 rounded-lg bg-cyan-600 hover:bg-cyan-500 border border-cyan-600 hover:border-cyan-500 text-white text-xl cursor-pointer flex items-center justify-center shadow"><i class="ri-menu-3-line"></i></div>
       <div :class="{ hidden: !showMobileNav }" class="absolute z-10 top-12 left-auto right-0 w-auto bg-white shadow-md rounded-lg p-6 flex flex-grow flex-col gap-4 items-start justify-center">
-        <ButtonPrimary v-if="isLoggedIn" class="w-full" @click="this.$router.push(`/dashboard`)">Dashboard</ButtonPrimary>
+        <ButtonPrimary v-if="isLoggedIn" class="w-full" @click="router.push(`/dashboard`)">Dashboard</ButtonPrimary>
         <ButtonLight v-if="isLoggedIn" class="w-full" @click="logOut">Logout</ButtonLight>
-        <ButtonPrimary v-if="!isLoggedIn" class="w-full" @click="this.$router.push(`/create-account`)">Create&nbsp;account</ButtonPrimary>
-        <ButtonLight v-if="!isLoggedIn" class="w-full" @click="this.$router.push(`/login`)">Login</ButtonLight>
+        <ButtonPrimary v-if="!isLoggedIn" class="w-full" @click="router.push(`/create-account`)">Create&nbsp;account</ButtonPrimary>
+        <ButtonLight v-if="!isLoggedIn" class="w-full" @click="router.push(`/login`)">Login</ButtonLight>
       </div>
     </div>
     <!-- Desktop Nav -->
     <div class="hidden md:flex flex-row gap-5 items-center justify-end">
-      <ButtonPrimary v-if="isLoggedIn" @click="this.$router.push(`/dashboard`)">Dashboard</ButtonPrimary>
+      <ButtonPrimary v-if="isLoggedIn" @click="router.push(`/dashboard`)">Dashboard</ButtonPrimary>
       <ButtonLight v-if="isLoggedIn" @click="logOut">Logout</ButtonLight>
-      <ButtonPrimary v-if="!isLoggedIn" @click="this.$router.push(`/create-account`)">Create&nbsp;account</ButtonPrimary>
-      <ButtonLight v-if="!isLoggedIn" @click="this.$router.push(`/login`)">Login</ButtonLight>
+      <ButtonPrimary v-if="!isLoggedIn" @click="router.push(`/create-account`)">Create&nbsp;account</ButtonPrimary>
+      <ButtonLight v-if="!isLoggedIn" @click="router.push(`/login`)">Login</ButtonLight>
     </div>
   </div>
 </template>

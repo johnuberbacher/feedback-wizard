@@ -80,7 +80,7 @@
             </div>
           </div>
           <div class="w-full md:w-auto flex flex-row gap-2 md:ml-4">
-            <ButtonLight class="shadow" @click="this.$router.push(`/edit/` + survey.id);"><span>Edit</span><i class="ri-pencil-line"></i></ButtonLight>
+            <ButtonLight class="shadow" @click="this.router.push(`/edit/` + survey.id);"><span>Edit</span><i class="ri-pencil-line"></i></ButtonLight>
           </div>
         </div>
         <!--<ButtonLight class="bg-white w-auto mr-auto ml-0">See all surveys</ButtonLight>-->
@@ -97,7 +97,6 @@ import { onMounted, reactive } from "vue";
 import { getFirestore, collection, getDocs, setDoc, doc } from "firebase/firestore";
 import { fb } from "@/plugins/firebase";
 import { useRouter } from "vue-router";
-
 import Navbar from "@/components/Navbar.vue";
 import SurveyStatus from "@/components/SurveyStatus";
 import CreateSurveyModal from "@/components/modals/CreateSurvey.vue";
