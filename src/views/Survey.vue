@@ -1,15 +1,16 @@
 <template>
   <div class="flex flex-col md:flex-row" v-if="state.survey">
     <aside
-      class="w-full md:max-w-[360px] md:min-w-[360px] bg-white md:border-r shadow-lg">
+      class="w-full md:max-w-[360px] md:min-w-[360px] bg-white md:border-r shadow md:shadow-lg relative">
       <div
         class="h-full p-5 md:p-10 md:pt-32 overflow-y-auto bg-white flex flex-col justify-between">
         <div class="w-ful flex flex-col gap-y-4">
-          <div class="font-semibold">
+          <div v-if="state.survey.creator" class="font-semibold select-none">
             {{ state.survey.creator ?? "🧙‍♂️ FeedbackWizard" }}
           </div>
+          <hr class="block md:hidden -mx-[20px]" />
           <div class="font-bold text-3xl">
-            {{ state.survey.title }}
+            {{ state.survey.title ?? "Survey" }}
           </div>
           <div class="text-gray-500">
             {{ state.survey.description }}
@@ -126,7 +127,7 @@
             </div>
           </div>
           <div
-            v-if="!errorMessage"
+            v-if="errorMessage"
             class="block text-red-600 font-semibold mb-4">
             {{ errorMessage }}
           </div>
@@ -141,8 +142,7 @@
               tabindex="(state.survey.questions[state.currentQuestion].options?.length + 1)"
               @click="
                 incrementQuestion(
-                  state.survey.questions[state.currentQuestion].title,
-                  state.survey.questions[state.currentQuestion].type,
+                  state.survey.questions[state.currentQuestion],
                   state.responseForm.questions[state.currentQuestion]
                 )
               "
@@ -163,7 +163,13 @@
 </template>
 <script setup>
 import { ref, onMounted, reactive } from "vue";
-import { getFirestore, doc, onSnapshot } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  onSnapshot,
+} from "firebase/firestore";
 import { fb } from "@/plugins/firebase";
 import { useRouter, useRoute } from "vue-router";
 import InputTextArea from "@/components/forms/InputTextArea";
@@ -178,37 +184,94 @@ const route = useRoute();
 const currentRoute = route.params.id;
 const router = useRouter();
 const errorMessage = ref();
+const responses = ref([]);
+const currentResponse = ref(null);
 
 const state = reactive({
   survey: null,
   responses: null,
   currentQuestion: 0,
   responseForm: {
-    questions: [
-      {
-        title: "",
-        type: "",
-        response: "",
-        options: "",
-      },
-    ],
+    questions: [],
   },
 });
 
-const incrementQuestion = (title, type, question) => {
-  const modelValue = state.responseForm.questions[state.currentQuestion];
-  console.log("Model value:", modelValue);
+const incrementQuestion = async (question, response) => {
+  errorMessage.value = "";
+
+  if (!response || response === "" || response === []) {
+    errorMessage.value = "Please make a selection.";
+    return;
+  }
+
+  const existingIndex = responses.value.findIndex(
+    (entry) => entry.questionIndex === question.questionIndex
+  );
+
+  if (existingIndex !== -1) {
+    // Update the existing entry
+    responses.value[existingIndex].response = response;
+  } else {
+    // Push a new entry
+    responses.value.push({
+      questionIndex: question.questionIndex,
+      title: question.title,
+      type: question.type,
+      response: response,
+    });
+  }
+
   state.currentQuestion++;
+
+  if (state.currentQuestion === state.survey.questions.length) {
+    submitResponse(question, response);
+  }
 };
 
 const decrementQuestion = () => {
   if (state.currentQuestion > 0) {
+    errorMessage.value = "";
     state.currentQuestion--;
   }
 };
 
-const submitResponse = () => {};
+const submitResponse = async () => {
+  const currentRoute = route.params.id;
+  const dateObj = new Date();
+  const year = dateObj.getFullYear();
+  const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+  const day = String(dateObj.getDate()).padStart(2, "0");
+  const timeObj = new Date();
+  const hours = String(timeObj.getHours()).padStart(2, "0");
+  const minutes = String(timeObj.getMinutes()).padStart(2, "0");
+  const seconds = String(timeObj.getSeconds()).padStart(2, "0");
 
+  const responseSubmission = {
+    title: state.survey.title,
+    creator: state.survey.creator,
+    description: state.survey.description,
+    submissionDate: `${year}${month}${day}`,
+    submissionTime: `${hours}:${minutes}:${seconds}`,
+    responses: Array.isArray(responses.value)
+      ? responses.value
+      : [responses.value],
+  };
+
+  try {
+    const docRef = doc(db, "responses", currentRoute);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      await setDoc(docRef, responseSubmission);
+    } else {
+      await setDoc(docRef, responseSubmission);
+    }
+  } catch (error) {
+    errorMessage.value = ("Error submitting response:", error);
+  }
+
+  console.log(responseSubmission);
+};
 onMounted(() => {
   const docRef = doc(db, "surveys", currentRoute);
   try {
@@ -216,6 +279,7 @@ onMounted(() => {
       if (doc.exists()) {
         state.survey = { ...doc.data(), id: doc.id };
         state.responses = state.survey;
+        document.title = state.survey.title;
         // Re-route if inactive survey
         if (state.survey.status == "inactive") {
           router.push("/");

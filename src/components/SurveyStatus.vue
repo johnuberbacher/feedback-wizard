@@ -7,7 +7,7 @@
       </div>
       <div
         v-if="props.status == 'inactive'"
-        class="w-auto py-2 px-3 rounded-lg font-base text-sm text-red-700 bg-red-200 capitalize">
+        class="w-auto py-2 px-3 rounded-lg font-medium text-sm text-red-700 bg-red-200 capitalize">
         {{ props.status }}
       </div>
     </div>

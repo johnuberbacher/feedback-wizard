@@ -12,8 +12,14 @@
     <div class="bg-white border-b shadow">
       <div
         class="w-full max-w-6xl mx-auto p-5 md:p-10 flex flex-col items-start justify-start gap-y-4">
-        <div class="font-semibold text-3xl">
+        <div class="w-full flex flex-row items-start justify-between">
+          <div class="font-semibold text-3xl">
           {{ state.survey.title }}
+        </div>
+          <!--<ButtonLight class="py-0 px-0 w-11 h-11 min-w-[44px]" @click="toggleSettingsMenu()"
+            ><i class="ri-settings-3-line text-xl"></i><span class="sr-only">Survey Settings</span></ButtonLight
+          >-->
+        
         </div>
         <div
           v-if="state.survey.creator"
@@ -25,14 +31,16 @@
         </div>
         <div class="w-full flex flex-row gap-x-4">
           <ButtonDanger @click="deleteSurveyModal(state.survey.id)"
-            >Delete survey</ButtonDanger
+            >Delete&nbsp;survey</ButtonDanger
           >
+
           <ButtonLight
+          class="overflow-hidden"
             v-if="state.survey.status == 'active'"
             @click="
               copyTextToClipboard(location + publicPath + state.survey.id)
             "
-            ><span>{{ location + publicPath + state.survey.id }}</span
+            ><span class="truncate">{{ location + publicPath + state.survey.id }}</span
             ><i class="ri-external-link-line"></i
           ></ButtonLight>
         </div>
@@ -98,11 +106,11 @@
             </div>
           </div>
         </div>
-        <div class="flex flex-row items-start gap-2 md:ml-4">
-          <ButtonLight @click="editQuestion(questionIndex)">
+        <div class="w-full sm:w-auto flex flex-row items-start gap-2 md:ml-4">
+          <ButtonLight class="w-full sm:w-auto" @click="editQuestion(questionIndex)">
             <span>Edit</span><i class="ri-pencil-line"></i>
           </ButtonLight>
-          <ButtonDanger @click="deleteQuestion(questionIndex)">
+          <ButtonDanger  @click="deleteQuestion(questionIndex)">
             <i class="ri-delete-bin-line"></i>
           </ButtonDanger>
         </div>
@@ -228,13 +236,6 @@ import ButtonPrimary from "@/components/forms/ButtonPrimary";
 import ButtonDanger from "@/components/forms/ButtonDanger";
 import ButtonLight from "@/components/forms/ButtonLight";
 
-const state = reactive({
-  surveyList: [],
-  survey: {},
-  deleteSurveyModal: false,
-  tempForm: {},
-});
-
 const db = getFirestore(fb);
 const fbRef = collection(db, "surveys");
 const route = useRoute();
@@ -246,6 +247,14 @@ const showModal = ref(false);
 const showToast = ref(false);
 const errorMessage = ref("");
 const emoji = ref(['😍','😃','🙂','😐','🙁'])
+
+const state = reactive({
+  surveyList: [],
+  survey: {},
+  deleteSurveyModal: false,
+  tempForm: {},
+});
+
 
 const fetchData = async () => {
   const fbDocs = await getDocs(fbRef);
@@ -322,7 +331,6 @@ const saveQuestion = async () => {
     return;
   }
 
-
   try {
     const docRef = doc(db, "surveys", currentRoute);
     const docSnapshot = await getDoc(docRef);
@@ -365,7 +373,6 @@ const deleteQuestion = async (questionIndex) => {
     console.log("Survey document does not exist!");
   }
 };
-
 
 const addOption = () => {
   state.tempForm.options.push("");
@@ -411,18 +418,3 @@ onMounted(() => {
   });
 });
 </script>
-<style scoped>
-.slide-enter-active,
-.slide-leave-active {
-  transition: transform 0.5s;
-}
-
-.slide-enter,
-.slide-leave-to {
-  transform: translateX(100%);
-}
-input:checked ~ .dot {
-  transform: translateX(100%);
-  background-color: #48bb78;
-}
-</style>
