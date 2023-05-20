@@ -17,8 +17,7 @@
           v-model="email"
           class="bg-white border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 block shadow w-full py-3 px-4"
           placeholder="email@address.com"
-          required
-        />
+          required />
       </div>
       <div>
         <label for="password" class="block text-gray-500 font-medium mb-2"
@@ -31,8 +30,7 @@
           v-model="password"
           class="bg-white border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 block shadow w-full py-3 px-4"
           placeholder="**********"
-          required
-        />
+          required />
       </div>
       <div>
         <label for="password" class="block text-gray-500 font-medium mb-2"
@@ -45,23 +43,17 @@
           v-model="verifyPassword"
           class="bg-white border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 block shadow w-full py-3 px-4"
           placeholder="**********"
-          required
-        />
+          required />
       </div>
       <div
         v-if="errorMessage"
-        class="block text-center text-red-600 font-semibold"
-      >
+        class="block text-center text-red-600 font-semibold">
         {{ errorMessage }}
       </div>
-      <button
-        @click="login"
-        type="submit"
-        class="w-full text-white bg-cyan-600 hover:bg-cyan-500 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg py-3 px-6 text-center"
-      >
+      <ButtonPrimary @click="createAccount" type="submit" class="w-full">
         Create account
-      </button>
-      <div class="text-center text-gray-400">
+      </ButtonPrimary>
+      <div class="text-center text-gray-500">
         Already have an account?
         <router-link
           to="/login"
@@ -77,6 +69,7 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import Navbar from "@/components/Navbar";
+import ButtonPrimary from "@/components/forms/ButtonPrimary";
 
 const email = ref("");
 const password = ref("");

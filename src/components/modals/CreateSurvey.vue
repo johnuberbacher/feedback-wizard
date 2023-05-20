@@ -7,7 +7,7 @@
         <button
           @click="$emit('createNewSurveyModal')"
           type="button"
-          class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+          class="absolute top-3 right-2.5 text-gray-500 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
           <svg
             aria-hidden="true"
             class="w-5 h-5"
@@ -34,59 +34,22 @@
                 newSurveyCreator: newSurveyCreator,
               })
             ">
-            <div>
-              <label
-                for="newSurveyTitle"
-                class="block text-gray-500 font-medium mb-2"
-                >What's the survey called?</label
-              >
-              <input
-                type="text"
-                name="newSurveyTitle"
-                v-model="newSurveyTitle"
-                id="newSurveyTitle"
-                class="bg-white border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 block shadow w-full py-3 px-4"
-                placeholder="Customer Satisfaction Feedback"
-                required />
-            </div>
-            <div>
-              <label
-                for="newSurveyDescription"
-                class="block text-gray-500 font-medium mb-2"
-                >How would you describe the survey?</label
-              >
-              <textarea
-                name="newSurveyDescription"
-                id="newSurveyDescription"
-                rows="5"
-                v-model="newSurveyDescription"
-                class="bg-white border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 block shadow w-full py-3 px-4"
-                placeholder="We're conducting this survey to gain insights into our customers' preferences and expectations. Your participation is essential to help us better serve you. Please take a few minutes to share your opinions with us."
-                required></textarea>
-            </div>
-            <div>
-              <label
-                for="newSurveyCreator"
-                class="block text-gray-500 font-medium mb-2"
-                >Who's creating the survey?</label
-              >
-              <input
-                type="text"
-                name="newSurveyCreator"
-                v-model="newSurveyCreator"
-                id="newSurveyCreator"
-                class="bg-white border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 block shadow w-full py-3 px-4"
-                placeholder="Bruce Wayne"
-                required />
-            </div>
-            <div class="text-sm text-gray-400 text-center">
+            <InputText
+              label="How would you describe the survey?"
+              v-model="newSurveyTitle"
+              placeholder="Customer Satisfaction Feedback" />
+            <InputTextArea
+              label="Who's creating the survey?"
+              v-model="newSurveyDescription"
+              placeholder="We're conducting this survey to gain insights into our customers' preferences and expectations. Your participation is essential to help us better serve you. Please take a few minutes to share your opinions with us." />
+            <InputText
+              label="Who's creating the survey?"
+              v-model="newSurveyCreator"
+              placeholder="John Uberbacher" />
+            <div class="text-sm text-gray-500 text-center">
               Click continue and start getting feedback in minutes.
             </div>
-            <button
-              type="submit"
-              class="w-full text-white bg-cyan-600 hover:bg-cyan-500 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg py-3 px-6 text-center">
-              Continue
-            </button>
+            <ButtonPrimary type="submit" class="w-full">Continue</ButtonPrimary>
           </form>
         </div>
       </div>
@@ -96,7 +59,10 @@
 <script setup>
 import { ref } from "vue";
 import InputText from "@/components/forms/InputText";
+import InputTextArea from "@/components/forms/InputTextArea";
+import ButtonPrimary from "@/components/forms/ButtonPrimary";
 const newSurveyTitle = ref(null);
 const newSurveyDescription = ref(null);
 const newSurveyCreator = ref(null);
+const newSurveyColor = ref(null);
 </script>

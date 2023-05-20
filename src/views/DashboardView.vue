@@ -7,33 +7,29 @@
         <div class="font-semibold text-3xl">Dashboard</div>
         <div class="flex flex-col md:flex-row gap-4 justify-stretch">
           <div
-            class="w-full bg-white drop-shadow-md rounded-lg p-6 flex flex-grow flex-col gap-4 items-start justify-center">
-            <div class="text-sm text-gray-400">Surveys created this month</div>
+            class="w-full bg-white shadow-md rounded-lg p-6 flex flex-grow flex-col gap-4 items-start justify-center">
+            <div class="text-sm text-gray-500">Surveys created this month</div>
             <div class="font-bold text-5xl">
               {{ getSurveysCreatedThisMonth(state.surveyList) }}
             </div>
           </div>
           <div
-            class="w-full bg-white drop-shadow-md rounded-lg p-6 flex flex-grow flex-col gap-4 items-start justify-center">
-            <div class="text-sm text-gray-400">Survey views this month</div>
+            class="w-full bg-white shadow-md rounded-lg p-6 flex flex-grow flex-col gap-4 items-start justify-center">
+            <div class="text-sm text-gray-500">Survey views this month</div>
             <div class="font-bold text-5xl">0</div>
           </div>
           <div
-            class="w-full bg-white drop-shadow-md rounded-lg p-6 flex flex-grow flex-col gap-4 items-start justify-center">
-            <div class="text-sm text-gray-400">Survey responses this month</div>
+            class="w-full bg-white shadow-md rounded-lg p-6 flex flex-grow flex-col gap-4 items-start justify-center">
+            <div class="text-sm text-gray-500">Survey responses this month</div>
             <div class="font-bold text-5xl">0</div>
           </div>
           <div
-            class="w-full bg-white drop-shadow-md rounded-lg p-4 flex flex-grow flex-col items-center justify-center text-center">
+            class="w-full bg-white shadow-md rounded-lg p-4 flex flex-grow flex-col items-center justify-center text-center">
             <div class="block font-semibold text-xl mb-1">Get feedback</div>
-            <div class="text-xs text-gray-400 mb-3">
+            <div class="text-xs text-gray-500 mb-3">
               Click the button below and start getting feedback in minutes.
             </div>
-            <button
-              @click="createNewSurveyModal()"
-              class="bg-cyan-600 hover:bg-cyan-500 focus:ring-4 focus:outline-none focus:ring-cyan-300 text-white font-medium w-full py-2 px-6 rounded-lg drop-shadow hover:drop-shadow-lg">
-              Create survey
-            </button>
+            <ButtonPrimary @click="createNewSurveyModal()" class="w-full">Create survey</ButtonPrimary>
           </div>
         </div>
       </div>
@@ -46,15 +42,15 @@
           v-for="(survey, index) in state.surveyList"
           :id="survey.id"
           :key="survey.id"
-          class="bg-white drop-shadow-md rounded-lg py-8 px-8 flex flex-col md:flex-row gap-y-4 items-start justify-between">
-          <div class="flex flex-col items-start justify-start gap-y-2">
+          class="bg-white shadow-md rounded-lg p-6 flex flex-col md:flex-row gap-y-4 items-start justify-between">
+          <div class="w-full flex flex-col items-start justify-start gap-y-2">
             <div
               v-if="survey.status == 'inactive'"
               class="w-full flex flex-col gap-y-2 text-gray-700">
               <div class="block font-semibold text-xl">
                 {{ survey.title }}
               </div>
-              <div class="text-sm text-gray-400">
+              <div class="text-sm text-gray-500">
                 {{ survey.description }}
               </div>
             </div>
@@ -62,45 +58,32 @@
               v-if="survey.status == 'active'"
               target="_blank"
               :href="publicPath + survey.id"
-              class="w-full flex flex-col gap-y-2 text-gray-700 hover:text-cyan-500">
-              <div class="block font-semibold text-xl">
-                <i class="ri-external-link-line"></i>&nbsp;&nbsp;{{
+              class="w-full flex flex-col gap-y-2 text-gray-700 hover:text-cyan-600">
+              <div class="flex flex-row items-center justify-start font-semibold text-xl">
+                <i class="ri-external-link-line"></i>&nbsp;&nbsp;<span>{{
                   survey.title
-                }}
+                }}</span>
               </div>
-              <div class="text-sm text-gray-400">
+              <div class="text-sm text-gray-500">
                 {{ survey.description }}
               </div>
             </a>
+            <div class="w-full flex flex-col gap-y-4 mt-2">
+            <hr/>
             <div class="flex flex-row items-start justify-start gap-2">
+            <SurveyStatus :status="survey.status"></SurveyStatus>
               <div
-                v-if="survey.status == 'active'"
-                class="w-auto py-2 px-3 rounded-lg font-semibold text-xs bg-lime-200 text-lime-800 capitalize">
-                {{ survey.status }}
-              </div>
-              <div
-                v-if="survey.status == 'inactive'"
-                class="w-auto py-2 px-3 rounded-lg font-semibold text-xs bg-red-100 text-red-600 capitalize">
-                {{ survey.status }}
-              </div>
-              <div
-                class="w-auto py-2 px-3 rounded-lg font-semibold text-xs bg-gray-100 text-gray-600 capitalize">
-                {{
-                  survey.creationDate
-                    ? getCreationDate(survey.creationDate)
-                    : "&nbsp;"
-                }}
+                class="w-auto py-2 px-3 rounded-lg font-semibold text-sm text-gray-600 bg-gray-100 capitalize">
+                0 responses
               </div>
             </div>
+            </div>
           </div>
-          <div class="flex flex-row gap-2 md:ml-4">
-            <router-link
-              :to="`/edit/` + survey.id"
-              class="bg-gray-50 border hover:bg-white text-gray-600 font-medium py-2 px-6 rounded-lg">
-              Edit
-            </router-link>
+          <div class="w-full md:w-auto flex flex-row gap-2 md:ml-4">
+            <ButtonLight class="shadow" @click="this.$router.push(`/edit/` + survey.id);"><span>Edit</span><i class="ri-pencil-line"></i></ButtonLight>
           </div>
         </div>
+        <!--<ButtonLight class="bg-white w-auto mr-auto ml-0">See all surveys</ButtonLight>-->
       </div>
     </div>
     <CreateSurveyModal
@@ -111,20 +94,20 @@
 </template>
 <script setup>
 import { onMounted, reactive } from "vue";
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  setDoc,
-  doc,
-} from "firebase/firestore";
+import { getFirestore, collection, getDocs, setDoc, doc } from "firebase/firestore";
 import { fb } from "@/plugins/firebase";
+import { useRouter } from "vue-router";
+
 import Navbar from "@/components/Navbar.vue";
+import SurveyStatus from "@/components/SurveyStatus";
 import CreateSurveyModal from "@/components/modals/CreateSurvey.vue";
+import ButtonPrimary from "@/components/forms/ButtonPrimary";
+import ButtonLight from "@/components/forms/ButtonLight";
 
 const db = getFirestore(fb);
 const fbRef = collection(db, "surveys");
 const publicPath = process.env.VUE_APP_PUBLIC_PATH;
+const router = useRouter();
 
 const state = reactive({
   surveyList: [],
@@ -132,14 +115,18 @@ const state = reactive({
 });
 
 const fetchData = async () => {
-  console.log(publicPath)
+  console.log(publicPath);
   const fbDocs = await getDocs(fbRef);
   const docdata = fbDocs.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 
-  // Sort data by Status then Date
   const sortedDocdata = docdata.sort((a, b) => {
-    if (a.status === "active" && b.status === "inactive") return -1;
-    if (a.status === "inactive" && b.status === "active") return 1;
+    const statusOrder = {
+      active: 0,
+      inactive: 1,
+    };
+
+    if (statusOrder[a.status] < statusOrder[b.status]) return -1;
+    if (statusOrder[a.status] > statusOrder[b.status]) return 1;
     if (a.creationDate < b.creationDate) return -1;
     if (a.creationDate > b.creationDate) return 1;
     return 0;
@@ -157,11 +144,7 @@ const getSurveysCreatedThisMonth = (surveys) => {
   const thisMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 
   const surveysThisMonth = surveys.filter((survey) => {
-    const creationYear = survey.creationDate.substring(0, 4);
-    const creationMonth = survey.creationDate.substring(4, 6) - 1;
-    const creationDay = survey.creationDate.substring(6, 8);
-    const creationDate = new Date(creationYear, creationMonth, creationDay);
-
+    const creationDate = new Date(survey.creationDate.slice(0, 4), survey.creationDate.slice(4, 6) - 1, survey.creationDate.slice(6, 8));
     return creationDate >= thisMonth;
   });
 
@@ -169,19 +152,13 @@ const getSurveysCreatedThisMonth = (surveys) => {
 };
 
 const getCreationDate = (date) => {
-  return `${date.substring(4, 6)}/${date.substring(6, 8)}/${date.substring(
-    0,
-    4
-  )}`;
+  return `${date.slice(4, 6)}/${date.slice(6, 8)}/${date.slice(0, 4)}`;
 };
 
 const createNewSurvey = async (value) => {
   console.log(value);
-  const chars =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  const documentID = [...Array(20)]
-    .map(() => chars[Math.floor(Math.random() * chars.length)])
-    .join("");
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const documentID = Array.from({ length: 20 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
   const docRef = doc(fbRef, documentID);
   const dateObj = new Date();
   const year = dateObj.getFullYear();
@@ -199,6 +176,7 @@ const createNewSurvey = async (value) => {
     });
     fetchData();
     state.createSurveyModal = false;
+    router.push(`/edit/` + documentID);
   } catch (error) {
     console.error("Error creating document: ", error);
   }

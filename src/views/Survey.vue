@@ -1,20 +1,26 @@
 <template>
   <div class="flex flex-col md:flex-row" v-if="state.survey">
     <aside
-      class="w-full md:max-w-[360px] md:min-w-[360px] bg-white md:border-r drop-shadow-lg">
+      class="w-full md:max-w-[360px] md:min-w-[360px] bg-white md:border-r shadow-lg">
       <div
         class="h-full p-5 md:p-10 md:pt-32 overflow-y-auto bg-white flex flex-col justify-between">
         <div class="w-ful flex flex-col gap-y-4">
-          <div class="font-semibold">{{ state.survey.creator ?? '🧙‍♂️ FeedbackWizard'}}</div>
+          <div class="font-semibold">
+            {{ state.survey.creator ?? "🧙‍♂️ FeedbackWizard" }}
+          </div>
           <div class="font-bold text-3xl">
             {{ state.survey.title }}
           </div>
-          <div class="text-gray-400">
+          <div class="text-gray-500">
             {{ state.survey.description }}
           </div>
         </div>
-        <router-link to="/" class="hidden md:block text-gray-400 hover:text-cyan-500 text-base cursor-pointer mt-4">
-          Made&nbsp;with&nbsp;<span class="font-medium">🧙‍♂️&nbsp;FeedbackWizard</span>
+        <router-link
+          to="/"
+          class="hidden md:block text-gray-500 hover:text-cyan-500 text-base cursor-pointer mt-4">
+          Made&nbsp;with&nbsp;<span class="font-medium"
+            >🧙‍♂️&nbsp;FeedbackWizard</span
+          >
         </router-link>
       </div>
     </aside>
@@ -23,8 +29,7 @@
         <!-- Feedback Complete -->
         <div
           v-if="state.currentQuestion >= state.survey.questions.length"
-          class="w-full max-w-[400px] mx-auto flex flex-col items-center justify-center gap-y-4 text-center"
-        >
+          class="w-full max-w-[400px] mx-auto flex flex-col items-center justify-center gap-y-4 text-center">
           <i class="ri-checkbox-circle-fill text-5xl text-cyan-600"></i>
           <div class="block font-semibold text-3xl text-gray-700">
             Survey complete!
@@ -36,9 +41,8 @@
         <!-- Feedback Survey -->
         <div
           v-if="state.currentQuestion + 1 <= state.survey.questions.length"
-          class="w-full max-w-3xl mx-auto flex flex-col items-stretch justify-start gap-y-4"
-        >
-          <div class="font-semibold text-slate-400">
+          class="w-full max-w-3xl mx-auto flex flex-col items-stretch justify-start gap-y-4">
+          <div class="block text-gray-400 font-medium">
             Question&nbsp;{{ state.currentQuestion + 1 }} of
             {{ state.survey.questions.length }}
           </div>
@@ -46,88 +50,154 @@
             {{ state.survey.questions[state.currentQuestion].title }}
           </div>
           <!-- Single Choice Question -->
-          <div class="flex flex-col min-h-[144px] my-2" v-if="state.survey.questions[state.currentQuestion].type === 'single'">
+          <div
+            class="flex flex-col my-2"
+            v-if="
+              state.survey.questions[state.currentQuestion].type === 'single'
+            ">
             <div
-              v-for="(option, index) in state.survey.questions[state.currentQuestion].options"
+              v-for="(option, index) in state.survey.questions[
+                state.currentQuestion
+              ].options"
               :key="option">
               <InputRadio
-                model="3"
                 :label="option"
+                :group="state.survey.questions[state.currentQuestion]"
+                :id="'radio-' + index"
                 :name="state.survey.questions[state.currentQuestion]"
                 :value="option"
-                :tabindex="1 + 1"></InputRadio>
+                :tabindex="1 + 1"
+                v-model="state.responseForm.questions[state.currentQuestion]" />
             </div>
           </div>
           <!-- Multiple Choice Question -->
-          <div class="flex flex-col min-h-[144px] my-2" v-if="state.survey.questions[state.currentQuestion].type === 'multiple'">
+          <div
+            class="flex flex-col my-2"
+            v-if="
+              state.survey.questions[state.currentQuestion].type === 'multiple'
+            ">
             <div
-              v-for="(option, index) in state.survey.questions[state.currentQuestion].options"
+              v-for="(option, index) in state.survey.questions[
+                state.currentQuestion
+              ].options"
               :key="option">
               <InputCheck
-                model="4"
                 :label="option"
+                :group="state.survey.questions[state.currentQuestion]"
+                :id="'check-' + index"
                 :name="state.survey.questions[state.currentQuestion]"
                 :value="option"
-                :tabindex="1 + 1"></InputCheck>
+                :tabindex="1 + 1"
+                v-model="state.responseForm.questions[state.currentQuestion]" />
             </div>
           </div>
           <!-- Text Question -->
           <div
-            class="min-h-[144px] my-2"
-            v-if="state.survey.questions[state.currentQuestion].type === 'text'"
-          >
+            class="my-2"
+            v-if="
+              state.survey.questions[state.currentQuestion].type === 'text'
+            ">
             <InputTextArea
               id="message"
-              rows="5"
-              class="block p-2.5 w-full drop-shadow text-gray-900 bg-white rounded-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 focus:drop-shadow-lg"
               placeholder="Write your thoughts here..."
-            ></InputTextArea>
+              v-model="state.responseForm.questions[state.currentQuestion]" />
           </div>
-          <!-- Continue / Back Buttons -->
+          <!-- Mood Question -->
+          <div
+            class="w-full flex flex-col lg:flex-row items-stretch justify-start gap-4 my-2"
+            v-if="
+              state.survey.questions[state.currentQuestion].type === 'mood'
+            ">
+            <div
+              class="w-full"
+              v-for="(option, index) in state.survey.questions[
+                state.currentQuestion
+              ].options"
+              :key="option">
+              <InputMood
+                :label="option"
+                :group="state.survey.questions[state.currentQuestion]"
+                :id="'mood-' + index"
+                :name="state.survey.questions[state.currentQuestion]"
+                :value="option"
+                :tabindex="1 + 1"
+                :index="index"
+                v-model="state.responseForm.questions[state.currentQuestion]" />
+            </div>
+          </div>
+          <div
+            v-if="!errorMessage"
+            class="block text-red-600 font-semibold mb-4">
+            {{ errorMessage }}
+          </div>
           <div class="flex flex-row items-stretch justify-start gap-4">
-            <button
-            tabindex="-1"
+            <ButtonLight
               v-if="state.currentQuestion > 0"
-              v-on:click="decrementQuestion()"
-              class="bg-gray-300 hover:bg-gray-200 text-gray-700 font-medium py-3 px-6 rounded-lg"
+              tabindex="-1"
+              @click="decrementQuestion()"
+              >Back</ButtonLight
             >
-              Back
-            </button>
-            <button
-              :tabindex="(state.survey.questions[state.currentQuestion].options?.length + 1)"
-              v-on:click="incrementQuestion()"
-              class="bg-cyan-600 hover:bg-cyan-500 text-white font-medium py-3 px-6 rounded-lg drop-shadow hover:drop-shadow-lg"
+            <ButtonPrimary
+              tabindex="(state.survey.questions[state.currentQuestion].options?.length + 1)"
+              @click="
+                incrementQuestion(
+                  state.survey.questions[state.currentQuestion].title,
+                  state.survey.questions[state.currentQuestion].type,
+                  state.responseForm.questions[state.currentQuestion]
+                )
+              "
+              >Continue</ButtonPrimary
             >
-              Continue
-            </button>
           </div>
         </div>
-        <router-link to="/" class="block md:hidden text-gray-400 hover:text-cyan-500 text-base cursor-pointer mt-24">
-          Made&nbsp;with&nbsp;<span class="font-medium">🧙‍♂️&nbsp;FeedbackWizard</span>
+        <router-link
+          to="/"
+          class="block md:hidden text-gray-500 hover:text-cyan-500 text-base cursor-pointer mt-24">
+          Made&nbsp;with&nbsp;<span class="font-medium"
+            >🧙‍♂️&nbsp;FeedbackWizard</span
+          >
         </router-link>
       </div>
     </div>
   </div>
 </template>
 <script setup>
-import { onMounted, reactive } from "vue";
-import {
-  getFirestore,
-  doc,
-  onSnapshot,
-} from "firebase/firestore";
+import { ref, onMounted, reactive } from "vue";
+import { getFirestore, doc, onSnapshot } from "firebase/firestore";
 import { fb } from "@/plugins/firebase";
 import { useRouter, useRoute } from "vue-router";
 import InputTextArea from "@/components/forms/InputTextArea";
 import InputRadio from "@/components/forms/InputRadio";
 import InputCheck from "@/components/forms/InputCheck";
+import InputMood from "@/components/forms/InputMood";
+import ButtonLight from "@/components/forms/ButtonLight";
+import ButtonPrimary from "@/components/forms/ButtonPrimary";
+
+const db = getFirestore(fb);
+const route = useRoute();
+const currentRoute = route.params.id;
+const router = useRouter();
+const errorMessage = ref();
 
 const state = reactive({
   survey: null,
+  responses: null,
   currentQuestion: 0,
+  responseForm: {
+    questions: [
+      {
+        title: "",
+        type: "",
+        response: "",
+        options: "",
+      },
+    ],
+  },
 });
 
-const incrementQuestion = () => {
+const incrementQuestion = (title, type, question) => {
+  const modelValue = state.responseForm.questions[state.currentQuestion];
+  console.log("Model value:", modelValue);
   state.currentQuestion++;
 };
 
@@ -136,10 +206,8 @@ const decrementQuestion = () => {
     state.currentQuestion--;
   }
 };
-const db = getFirestore(fb);
-const route = useRoute();
-const currentRoute = route.params.id;
-const router = useRouter();
+
+const submitResponse = () => {};
 
 onMounted(() => {
   const docRef = doc(db, "surveys", currentRoute);
@@ -147,9 +215,9 @@ onMounted(() => {
     onSnapshot(docRef, (doc) => {
       if (doc.exists()) {
         state.survey = { ...doc.data(), id: doc.id };
-        document.title =  state.survey.title
-        console.log(state.survey.questions[state.currentQuestion])
-        if (state.survey.status == 'inactive') {
+        state.responses = state.survey;
+        // Re-route if inactive survey
+        if (state.survey.status == "inactive") {
           router.push("/");
         }
       } else {
@@ -157,8 +225,7 @@ onMounted(() => {
       }
     });
   } catch (error) {
-      router.push("/");
+    router.push("/");
   }
-
 });
 </script>

@@ -9,7 +9,7 @@
         <button
           @click="$emit('deleteSurveyModal')"
           type="button"
-          class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+          class="absolute top-3 right-2.5 text-gray-500 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
           <svg
             aria-hidden="true"
             class="w-5 h-5"
@@ -25,27 +25,23 @@
         </button>
         <div class="p-10">
           <div class="text-2xl font-medium mb-5 text-center">Heads up!</div>
+          <div class="font-base text-gray-600 mb-2 text-center">
+            Deleting a survey is a permanent action that cannot be undone.
+          </div>
           <div class="font-base text-gray-600 mb-5 text-center">
-            Deleting a survey is a permanent action that cannot be undone. Are
+            Are
             you sure you want to proceed?
           </div>
           <div class="w-full flex flex-row gap-4">
-            <button
-              @click="$emit('deleteSurvey')"
-              type="submit"
-              class="w-full text-white bg-cyan-600 hover:bg-cyan-500 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg py-3 px-6 text-center">
-              Delete
-            </button>
-            <button
-              @click="$emit('deleteSurveyModal')"
-              type="submit"
-              class="w-full text-gray-700 bg-gray-300 hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg py-3 px-6 text-center">
-              Cancel
-            </button>
+            <ButtonDanger class="w-full" @click="$emit('deleteSurvey')">Yes, delete&nbsp;it</ButtonDanger>
+            <ButtonLight class="w-full" @click="$emit('deleteSurveyModal')">Cancel</ButtonLight>
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
-<script setup></script>
+<script setup>
+import ButtonDanger from "@/components/forms/ButtonDanger";
+import ButtonLight from "@/components/forms/ButtonLight";
+</script>
