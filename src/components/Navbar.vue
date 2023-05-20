@@ -4,23 +4,23 @@
     <router-link
       to="/dashboard"
       v-if="isLoggedIn"
-      class="py-2 text-gray-800 font-medium hover:text-cyan-600 cursor-pointer"
+      class="py-2 text-gray-800 font-medium hover:text-cyan-600 cursor-pointer rounded-md"
       >🧙‍♂️&nbsp;Feedback&nbsp;Wizard</router-link
     >
     <router-link
       to="/"
       v-if="!isLoggedIn"
-      class="py-2 text-gray-800 font-medium hover:text-cyan-600 cursor-pointer"
+      class="py-2 text-gray-800 font-medium hover:text-cyan-600 cursor-pointer rounded-md"
       >🧙‍♂️&nbsp;Feedback&nbsp;Wizard</router-link
     >
     <!-- Mobile Nav -->
     <div class="flex md:hidden flex-row gap-5 relative items-center justify-end">
-      <div @click="toggleMobileNav" style="" class="w-10 h-10 rounded-lg bg-cyan-600 hover:bg-cyan-500 border border-cyan-600 hover:border-cyan-500 text-white text-xl cursor-pointer flex items-center justify-center shadow"><i class="ri-menu-3-line"></i></div>
+      <ButtonPrimary class="w-10 h-10" @click="toggleMobileNav"><i class="ri-menu-3-line"></i></ButtonPrimary>
       <div :class="{ hidden: !showMobileNav }" class="absolute z-10 top-12 left-auto right-0 w-auto bg-white shadow-md rounded-lg p-6 flex flex-grow flex-col gap-4 items-start justify-center">
-        <ButtonPrimary v-if="isLoggedIn" class="w-full" @click="router.push(`/dashboard`)">Dashboard</ButtonPrimary>
-        <ButtonLight v-if="isLoggedIn" class="w-full" @click="logOut">Logout</ButtonLight>
-        <ButtonPrimary v-if="!isLoggedIn" class="w-full" @click="router.push(`/create-account`)">Create&nbsp;account</ButtonPrimary>
-        <ButtonLight v-if="!isLoggedIn" class="w-full" @click="router.push(`/login`)">Login</ButtonLight>
+        <ButtonPrimary v-if="isLoggedIn" class="w-full px-10" @click="router.push(`/dashboard`)">Dashboard</ButtonPrimary>
+        <ButtonLight v-if="isLoggedIn" class="w-full px-10" @click="logOut">Logout</ButtonLight>
+        <ButtonPrimary v-if="!isLoggedIn" class="w-full px-10" @click="router.push(`/create-account`)">Create&nbsp;account</ButtonPrimary>
+        <ButtonLight v-if="!isLoggedIn" class="w-full px-10" @click="router.push(`/login`)">Login</ButtonLight>
       </div>
     </div>
     <!-- Desktop Nav -->

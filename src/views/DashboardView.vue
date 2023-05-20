@@ -80,7 +80,7 @@
             </div>
           </div>
           <div class="w-full md:w-auto flex flex-row gap-2 md:ml-4">
-            <ButtonLight class="shadow" @click="this.router.push(`/edit/` + survey.id);"><span>Edit</span><i class="ri-pencil-line"></i></ButtonLight>
+            <ButtonLight class="shadow" @click="router.push(`/edit/` + survey.id);"><span>Edit</span><i class="ri-pencil-line"></i></ButtonLight>
           </div>
         </div>
         <!--<ButtonLight class="bg-white w-auto mr-auto ml-0">See all surveys</ButtonLight>-->
