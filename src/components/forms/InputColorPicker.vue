@@ -96,7 +96,6 @@ const state = reactive({
 });
 
 const toggleColorPicker = () => {
-  console.log("ekllo");
   state.isOpen = !state.isOpen;
 };
 </script>

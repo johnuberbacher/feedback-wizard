@@ -6,6 +6,7 @@ import Survey from "../views/Survey";
 import DashboardView from "../views/DashboardView";
 import LoginView from "../views/LoginView";
 import CreateAccount from "../views/CreateAccount";
+
 const routes = [
   {
     path: "/",

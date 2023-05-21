@@ -163,13 +163,7 @@
 </template>
 <script setup>
 import { ref, onMounted, reactive } from "vue";
-import {
-  getFirestore,
-  doc,
-  setDoc,
-  getDoc,
-  onSnapshot,
-} from "firebase/firestore";
+import { getFirestore, doc, getDoc, updateDoc, onSnapshot } from "firebase/firestore";
 import { fb } from "@/plugins/firebase";
 import { useRouter, useRoute } from "vue-router";
 import InputTextArea from "@/components/forms/InputTextArea";
@@ -213,12 +207,12 @@ const incrementQuestion = async (question, response) => {
     responses.value[existingIndex].response = response;
   } else {
     // Push a new entry
-    responses.value.push({
-      questionIndex: question.questionIndex,
-      title: question.title,
-      type: question.type,
-      response: response,
-    });
+    responses.value.push([
+      question.questionIndex,
+      question.title,
+      question.type,
+      response,
+    ]);
   }
 
   state.currentQuestion++;
@@ -235,6 +229,8 @@ const decrementQuestion = () => {
   }
 };
 
+const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
 const submitResponse = async () => {
   const currentRoute = route.params.id;
   const dateObj = new Date();
@@ -245,33 +241,30 @@ const submitResponse = async () => {
   const hours = String(timeObj.getHours()).padStart(2, "0");
   const minutes = String(timeObj.getMinutes()).padStart(2, "0");
   const seconds = String(timeObj.getSeconds()).padStart(2, "0");
+  const responseSubmission = [
+    state.survey.title,
+    state.survey.creator,
+    state.survey.description,
+    `${year}-${month}-${day}`, // Use dashes (-) to separate year, month, and day
+    `${hours}:${minutes}:${seconds}`,
+    responses,
+  ];
+  
+  const docRef = doc(db, "surveys", currentRoute);
+  const docSnap = await getDoc(docRef);
 
-  const responseSubmission = {
-    title: state.survey.title,
-    creator: state.survey.creator,
-    description: state.survey.description,
-    submissionDate: `${year}${month}${day}`,
-    submissionTime: `${hours}:${minutes}:${seconds}`,
-    responses: Array.isArray(responses.value)
-      ? responses.value
-      : [responses.value],
-  };
+  if (docSnap.exists()) {
+    // Add responseSubmission to the 'responses' array field in the document
+    await updateDoc(docRef, {
+      responses: responseSubmission
+    });
 
-  try {
-    const docRef = doc(db, "responses", currentRoute);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      await setDoc(docRef, responseSubmission);
-    } else {
-      await setDoc(docRef, responseSubmission);
-    }
-  } catch (error) {
-    errorMessage.value = ("Error submitting response:", error);
+    fetchData(); // Assuming this function fetches and updates the survey data
+  } else {
+    errorMessage ="Survey document does not exist!";
   }
-
-  console.log(responseSubmission);
 };
+
 onMounted(() => {
   const docRef = doc(db, "surveys", currentRoute);
   try {

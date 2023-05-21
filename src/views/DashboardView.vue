@@ -83,18 +83,19 @@
             <ButtonLight class="w-full sm:w-auto" @click="router.push(`/edit/` + survey.id);"><span>Edit</span><i class="ri-pencil-line"></i></ButtonLight>
           </div>
         </div>
-        <!--<ButtonLight class="bg-white w-auto mr-auto ml-0">See all surveys</ButtonLight>-->
       </div>
     </div>
     <CreateSurveyModal
       v-if="state.createSurveyModal"
+      :errorMessage="errorMessage"
       @createNewSurvey="createNewSurvey"
       @createNewSurveyModal="createNewSurveyModal" />
   </div>
 </template>
 <script setup>
-import { onMounted, reactive } from "vue";
+import { ref, onMounted, reactive } from "vue";
 import { getFirestore, collection, getDocs, setDoc, doc } from "firebase/firestore";
+import { getCurrentUser, getUserEmail } from "@/plugins/auth";
 import { fb } from "@/plugins/firebase";
 import { useRouter } from "vue-router";
 import Navbar from "@/components/Navbar.vue";
@@ -107,6 +108,7 @@ const db = getFirestore(fb);
 const fbRef = collection(db, "surveys");
 const publicPath = process.env.VUE_APP_PUBLIC_PATH;
 const router = useRouter();
+const errorMessage = ref();
 
 const state = reactive({
   surveyList: [],
@@ -114,22 +116,25 @@ const state = reactive({
 });
 
 const fetchData = async () => {
-  console.log(publicPath);
+  const userEmail = await getUserEmail();
+  
   const fbDocs = await getDocs(fbRef);
   const docdata = fbDocs.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 
-  const sortedDocdata = docdata.sort((a, b) => {
-    const statusOrder = {
-      active: 0,
-      inactive: 1,
-    };
+  const sortedDocdata = docdata
+    .sort((a, b) => {
+      const statusOrder = {
+        active: 0,
+        inactive: 1,
+      };
 
-    if (statusOrder[a.status] < statusOrder[b.status]) return -1;
-    if (statusOrder[a.status] > statusOrder[b.status]) return 1;
-    if (a.creationDate < b.creationDate) return -1;
-    if (a.creationDate > b.creationDate) return 1;
-    return 0;
-  });
+      if (statusOrder[a.status] < statusOrder[b.status]) return -1;
+      if (statusOrder[a.status] > statusOrder[b.status]) return 1;
+      if (a.creationDate < b.creationDate) return -1;
+      if (a.creationDate > b.creationDate) return 1;
+      return 0;
+    })
+    .filter((survey) => survey.userEmail === userEmail); // Filter surveys by userEmail
 
   state.surveyList = sortedDocdata;
 };
@@ -155,7 +160,6 @@ const getCreationDate = (date) => {
 };
 
 const createNewSurvey = async (value) => {
-  console.log(value);
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   const documentID = Array.from({ length: 20 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
   const docRef = doc(fbRef, documentID);
@@ -163,22 +167,46 @@ const createNewSurvey = async (value) => {
   const year = dateObj.getFullYear();
   const month = String(dateObj.getMonth() + 1).padStart(2, "0");
   const day = String(dateObj.getDate()).padStart(2, "0");
+  const userEmail = await getUserEmail();
+
+  if (!userEmail) {
+    errorMessage.value = "Uh-oh, User is not authenticated!";
+    return;
+  }
+
+  if (!value.newSurveyTitle  || value.newSurveyTitle === "") {
+    errorMessage.value = "Uh-oh, all fields are required!";
+    return;
+  }
+
+  if (value.newSurveyDescription === "") {
+    errorMessage.value = "Uh-oh, all fields are required!";
+    return;
+  }
+
+  if (value.newSurveyCreator.trim() === "") {
+    errorMessage.value = "Uh-oh, all fields are required!";
+    return;
+  }
 
   try {
     await setDoc(docRef, {
       title: value.newSurveyTitle,
       description: value.newSurveyDescription,
       creator: value.newSurveyCreator,
+      userEmail: userEmail,
       status: "inactive",
       questions: [],
       creationDate: `${year}${month}${day}`,
+      responses: [],
     });
     fetchData();
     state.createSurveyModal = false;
     router.push(`/edit/` + documentID);
   } catch (error) {
-    console.error("Error creating document: ", error);
+    errorMessage.value = "Error creating document: ", error;
   }
+
 };
 
 onMounted(fetchData);

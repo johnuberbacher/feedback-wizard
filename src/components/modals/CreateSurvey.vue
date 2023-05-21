@@ -39,7 +39,7 @@
               v-model="newSurveyTitle"
               placeholder="Customer Satisfaction Feedback" />
             <InputTextArea
-              label="Who's creating the survey?"
+              label="How would you describe the survey?"
               v-model="newSurveyDescription"
               placeholder="We're conducting this survey to gain insights into our customers' preferences and expectations. Your participation is essential to help us better serve you. Please take a few minutes to share your opinions with us." />
             <InputText
@@ -49,6 +49,11 @@
             <div class="text-sm text-gray-500 text-center">
               Click continue and start getting feedback in minutes.
             </div>
+            <div
+              v-if="props.errorMessage"
+              class="block text-center text-red-600 font-semibold">
+              {{ props.errorMessage }}
+            </div>
             <ButtonPrimary type="submit" class="w-full">Continue</ButtonPrimary>
           </form>
         </div>
@@ -57,7 +62,7 @@
   </div>
 </template>
 <script setup>
-import { ref } from "vue";
+import { ref, defineProps } from "vue";
 import InputText from "@/components/forms/InputText";
 import InputTextArea from "@/components/forms/InputTextArea";
 import ButtonPrimary from "@/components/forms/ButtonPrimary";
@@ -65,4 +70,5 @@ const newSurveyTitle = ref(null);
 const newSurveyDescription = ref(null);
 const newSurveyCreator = ref(null);
 const newSurveyColor = ref(null);
+const props = defineProps(["errorMessage"]);
 </script>

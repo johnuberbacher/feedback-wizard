@@ -14,12 +14,11 @@
         class="w-full max-w-6xl mx-auto p-5 md:p-10 flex flex-col items-start justify-start gap-y-4">
         <div class="w-full flex flex-row items-start justify-between">
           <div class="font-semibold text-3xl">
-          {{ state.survey.title }}
-        </div>
+            {{ state.survey.title }}
+          </div>
           <!--<ButtonLight class="py-0 px-0 w-11 h-11 min-w-[44px]" @click="toggleSettingsMenu()"
             ><i class="ri-settings-3-line text-xl"></i><span class="sr-only">Survey Settings</span></ButtonLight
           >-->
-        
         </div>
         <div
           v-if="state.survey.creator"
@@ -30,17 +29,31 @@
           {{ state.survey.description }}
         </div>
         <div class="w-full flex flex-row gap-x-4">
-          <ButtonDanger @click="deleteSurveyModal(state.survey.id)"
+          <ButtonDanger 
+            v-if="state.survey.status == 'active'"
+            @click="toggleSurveyStatus(state.survey.id)"
+            >Disable&nbsp;survey</ButtonDanger
+          >
+          <ButtonDanger 
+            v-if="state.survey.status == 'inactive'"
+            @click="deleteSurveyModal(state.survey.id)"
             >Delete&nbsp;survey</ButtonDanger
+          >
+          <ButtonActive 
+            v-if="state.survey.status == 'inactive'"
+            @click="toggleSurveyStatus(state.survey.id)"
+            >Activate&nbsp;survey</ButtonActive
           >
 
           <ButtonLight
-          class="overflow-hidden"
+            class="overflow-hidden"
             v-if="state.survey.status == 'active'"
             @click="
               copyTextToClipboard(location + publicPath + state.survey.id)
             "
-            ><span class="truncate">{{ location + publicPath + state.survey.id }}</span
+            ><span class="truncate">{{
+              location + publicPath + state.survey.id
+            }}</span
             ><i class="ri-external-link-line"></i
           ></ButtonLight>
         </div>
@@ -68,11 +81,37 @@
       </div>
     </div>
     <div class="w-full max-w-6xl flex flex-col gap-y-4 p-5 md:p-10 mx-auto">
-      <div
-        v-if="state.survey.questions?.length > 0"
-        class="block font-semibold text-2xl">
-        Questions ({{ state.survey.questions?.length ?? 0 }})
+      <div class="w-full flex flex-row items-center justify-start gap-8 text-gray-400">
+        <div
+          :class="{ 'text-black': state.survey }"
+          v-if="state.survey.questions?.length > 0"
+          class="block font-semibold md:text-2xl cursor-pointer">
+          Questions&nbsp;({{ state.survey.questions?.length ?? 0 }})
+        </div>
+        <div
+          v-if="state.survey.questions?.length > 0"
+          class="block font-semibold md:text-2xl cursor-pointer">
+          Responses&nbsp;({{ state.survey.responses?.length ?? 0 }})
+        </div>
       </div>
+      <!-- Responses 
+      <div
+        class="bg-white shadow-md rounded-lg p-6 flex flex-col md:flex-row gap-y-4 items-start justify-between">
+        <div class="w-full flex flex-col items-start justify-start gap-y-2">
+          <div class="w-full flex flex-col gap-y-0 text-gray-700">
+            <div class="block font-semibold text-xl">Anonymous</div>
+            <div class="text-sm text-gray-500">Answered on 05/20/2023</div>
+          </div>
+        </div>
+        <div class="w-full sm:w-auto flex flex-row items-start gap-2 md:ml-4">
+          <button
+            type="button"
+            class="flex flex-row items-center justify-center gap-x-2 px-4 py-2 transition-all transform text-center rounded-md select-none shadow font-medium bg-gray-50 hover:bg-gray-100 border border-gray-300 text-gray-800 w-full sm:w-auto">
+            <span>View</span>
+          </button>
+        </div>
+      </div>-->
+      <!-- Questions -->
       <div
         v-if="state.survey.questions?.length <= 0"
         class="max-w-xl mx-auto text-center font-semibold text-xl text-gray-700">
@@ -107,22 +146,27 @@
           </div>
         </div>
         <div class="w-full sm:w-auto flex flex-row items-start gap-2 md:ml-4">
-          <ButtonLight class="w-full sm:w-auto" @click="editQuestion(questionIndex)">
+          <ButtonLight
+            class="w-full sm:w-auto"
+            @click="editQuestion(questionIndex)">
             <span>Edit</span><i class="ri-pencil-line"></i>
           </ButtonLight>
-          <ButtonDanger  @click="deleteQuestion(questionIndex)">
+          <ButtonDanger @click="deleteQuestion(questionIndex)">
             <i class="ri-delete-bin-line"></i>
           </ButtonDanger>
         </div>
       </div>
       <ButtonLight
-      :class="{ 'mx-auto mr-auto ml-auto': state.survey.questions?.length <= 0}"
+        :class="{
+          'mx-auto mr-auto ml-auto': state.survey.questions?.length <= 0,
+        }"
         class="w-auto ml-auto"
         @click="addNewQuestion(state.survey.id)"
         ><span>add&nbsp;question</span><i class="ri-add-line font-semibold"></i
       ></ButtonLight>
     </div>
     <Modal v-if="showModal" @close="showModal = false">
+      <form class="space-y-6" @submit.prevent="saveQuestion()">
       <InputText
         label="Question Title"
         v-model="state.tempForm.title"
@@ -190,15 +234,14 @@
         class="block text-center text-red-600 font-semibold">
         {{ errorMessage }}
       </div>
-      <div
-        v-if="state.tempForm.type == 'mood'"
-        class="space-y-2">
+      <div v-if="state.tempForm.type == 'mood'" class="space-y-2">
         <label class="block text-gray-500 font-medium">Options</label>
         <div
           class="w-full flex flex-row gap-2 items-center relative"
           v-for="(option, optionIndex) in 5"
           v-bind:key="optionIndex">
-          <div class="text-2xl h-10 w-10 min-w-10 -ml-1 mr-2 flex items-center justify-center">
+          <div
+            class="text-2xl h-10 w-10 min-w-10 -ml-1 mr-2 flex items-center justify-center">
             {{ emoji[optionIndex] }}
           </div>
           <InputText
@@ -208,7 +251,9 @@
             placeholder="Enter your response here..." />
         </div>
       </div>
-      <ButtonPrimary @click="saveQuestion()" class="w-full">Save Question</ButtonPrimary>
+      <ButtonPrimary type="submit" class="w-full"
+        >Save Question</ButtonPrimary
+      ></form>
     </Modal>
   </div>
 </template>
@@ -225,6 +270,7 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { fb } from "@/plugins/firebase";
+import { getCurrentUser, getUserEmail } from "@/plugins/auth";
 import { useRouter, useRoute } from "vue-router";
 import Navbar from "@/components/Navbar";
 import Toast from "@/components/Toast";
@@ -235,9 +281,9 @@ import DeleteSurveyModal from "@/components/modals/DeleteSurvey";
 import ButtonPrimary from "@/components/forms/ButtonPrimary";
 import ButtonDanger from "@/components/forms/ButtonDanger";
 import ButtonLight from "@/components/forms/ButtonLight";
+import ButtonActive from "@/components/forms/ButtonActive";
 
 const db = getFirestore(fb);
-const fbRef = collection(db, "surveys");
 const route = useRoute();
 const currentRoute = route.params.id;
 const router = useRouter();
@@ -246,21 +292,35 @@ const publicPath = process.env.VUE_APP_PUBLIC_PATH;
 const showModal = ref(false);
 const showToast = ref(false);
 const errorMessage = ref("");
-const emoji = ref(['😍','😃','🙂','😐','🙁'])
+const emoji = ref(["😍", "😃", "🙂", "😐", "🙁"]);
 
 const state = reactive({
-  surveyList: [],
   survey: {},
   deleteSurveyModal: false,
   tempForm: {},
 });
 
-
 const fetchData = async () => {
-  const fbDocs = await getDocs(fbRef);
-  const docdata = fbDocs.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-  state.surveyList = docdata;
+  const userEmail = await getUserEmail();
+
+  const docRef = doc(db, "surveys", currentRoute);
+  const snapshot = await getDoc(docRef);
+
+  if (snapshot.exists()) {
+    const surveyData = snapshot.data();
+    const surveyUserEmail = surveyData.userEmail;
+
+    if (userEmail === surveyUserEmail) {
+      state.survey = { ...surveyData, id: snapshot.id };
+    } else {
+      router.push("/dashboard");
+    }
+  } else {
+    router.push("/dashboard");
+  }
 };
+
+
 
 const copyTextToClipboard = (value) => {
   navigator.clipboard
@@ -294,10 +354,8 @@ const addNewQuestion = async (surveyID) => {
     ];
 
     await updateDoc(docRef, { questions: updatedQuestions });
-
-    console.log("Question added successfully!");
   } else {
-    console.log("Survey does not exist.");
+    errorMessage.value = "Survey does not exist.";
   }
 };
 
@@ -307,12 +365,11 @@ const editQuestion = async (questionIndex) => {
   state.tempForm.title = await state.survey.questions[questionIndex].title;
   state.tempForm.type = await state.survey.questions[questionIndex].type;
   state.tempForm.options = await state.survey.questions[questionIndex].options;
-  errorMessage.value = ""
+  errorMessage.value = "";
   showModal.value = true;
 };
 
 const saveQuestion = async () => {
-  console.log(state.tempForm);
 
   if (state.tempForm.title.trim() === "") {
     errorMessage.value = "Uh-oh, all fields are required!";
@@ -324,7 +381,7 @@ const saveQuestion = async () => {
     return;
   }
 
-  if (state.tempForm.options.every(option => option.trim() !== "")) {
+  if (state.tempForm.options.every((option) => option.trim() !== "")) {
     // All entries are not empty strings
   } else {
     errorMessage.value = "Uh-oh, all fields are required!";
@@ -370,7 +427,7 @@ const deleteQuestion = async (questionIndex) => {
     await updateDoc(docRef, { questions: updatedQuestions });
     fetchData();
   } else {
-    console.log("Survey document does not exist!");
+    errorMessage = "Survey document does not exist!";
   }
 };
 
@@ -385,6 +442,19 @@ const deleteOption = (optionIndex) => {
 const deleteSurveyModal = () => {
   state.deleteSurveyModal = !state.deleteSurveyModal;
 };
+
+const toggleSurveyStatus = async (id) => {
+  const docRef = doc(db, "surveys", id);
+  const docSnap = await getDoc(docRef);
+  const surveyData = docSnap.data();
+  
+  if (surveyData.status === "active") {
+    await updateDoc(docRef, { status: "inactive" });
+  } else if (surveyData.status === "inactive") {
+    await updateDoc(docRef, { status: "active" });
+  }
+};
+
 
 const deleteSurvey = async (id) => {
   const docRef = doc(db, "surveys", id);
@@ -407,14 +477,8 @@ const formatDate = (dateString) => {
 };
 
 onMounted(() => {
+
+
   fetchData();
-  const docRef = doc(db, "surveys", currentRoute);
-  onSnapshot(docRef, (doc) => {
-    if (doc.exists()) {
-      state.survey = { ...doc.data(), id: doc.id };
-    } else {
-      router.push("/dashboard");
-    }
-  });
 });
 </script>

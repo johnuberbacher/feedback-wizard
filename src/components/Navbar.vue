@@ -57,7 +57,6 @@ onMounted(() => {
 
 const toggleMobileNav = () => {
   showMobileNav.value = !showMobileNav.value
-  console.log(showMobileNav.value)
 }
 
 const logOut = () => {
