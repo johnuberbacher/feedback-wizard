@@ -284,6 +284,7 @@ import ButtonLight from "@/components/forms/ButtonLight";
 import ButtonActive from "@/components/forms/ButtonActive";
 
 const db = getFirestore(fb);
+const fbRef = collection(db, "surveys");
 const route = useRoute();
 const currentRoute = route.params.id;
 const router = useRouter();
@@ -302,24 +303,16 @@ const state = reactive({
 
 const fetchData = async () => {
   const userEmail = await getUserEmail();
-
+  
   const docRef = doc(db, "surveys", currentRoute);
   const snapshot = await getDoc(docRef);
-
+  
   if (snapshot.exists()) {
-    const surveyData = snapshot.data();
-    const surveyUserEmail = surveyData.userEmail;
-
-    if (userEmail === surveyUserEmail) {
-      state.survey = { ...surveyData, id: snapshot.id };
-    } else {
-      router.push("/dashboard");
-    }
+    state.survey = { ...snapshot.data(), id: snapshot.id };
   } else {
     router.push("/dashboard");
   }
 };
-
 
 
 const copyTextToClipboard = (value) => {
@@ -354,6 +347,7 @@ const addNewQuestion = async (surveyID) => {
     ];
 
     await updateDoc(docRef, { questions: updatedQuestions });
+    fetchData();
   } else {
     errorMessage.value = "Survey does not exist.";
   }
@@ -453,8 +447,9 @@ const toggleSurveyStatus = async (id) => {
   } else if (surveyData.status === "inactive") {
     await updateDoc(docRef, { status: "active" });
   }
+  
+  fetchData();
 };
-
 
 const deleteSurvey = async (id) => {
   const docRef = doc(db, "surveys", id);
@@ -477,8 +472,6 @@ const formatDate = (dateString) => {
 };
 
 onMounted(() => {
-
-
-  fetchData();
+fetchData();
 });
 </script>
