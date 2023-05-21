@@ -67,14 +67,15 @@
             <div class="font-medium text-xs text-gray-500">Created</div>
             <div
               class="w-auto py-2 px-3 rounded-lg font-semibold text-sm text-gray-600 bg-gray-100 capitalize">
-              {{ formatDate(state.survey.creationDate) }}
+              {{ new Date(state.survey.creationDate.seconds * 1000).toLocaleDateString('en-US') }}
             </div>
           </div>
-          <div class="space-y-1">
+          <div 
+            v-if="state.survey.lastUpdate" class="space-y-1">
             <div class="font-medium text-xs text-gray-500">Last Update</div>
             <div
               class="w-auto py-2 px-3 rounded-lg font-semibold text-sm text-gray-600 bg-gray-100 capitalize">
-              {{ formatDate(state.survey.creationDate) }}
+              {{ new Date(state.survey.lastUpdate.seconds * 1000).toLocaleDateString('en-US') }}
             </div>
           </div>
         </div>
@@ -354,12 +355,11 @@ const addNewQuestion = async (surveyID) => {
 };
 
 const editQuestion = async (questionIndex) => {
-  state.tempForm.questionIndex = await questionIndex;
-  state.tempForm.questionIndex = await questionIndex;
-  state.tempForm.title = await state.survey.questions[questionIndex].title;
-  state.tempForm.type = await state.survey.questions[questionIndex].type;
-  state.tempForm.options = await state.survey.questions[questionIndex].options;
   errorMessage.value = "";
+  state.tempForm.questionIndex =  questionIndex;
+  state.tempForm.title =  state.survey.questions[questionIndex].title;
+  state.tempForm.type =  state.survey.questions[questionIndex].type;
+  state.tempForm.options = await state.survey.questions[questionIndex].options;
   showModal.value = true;
 };
 
