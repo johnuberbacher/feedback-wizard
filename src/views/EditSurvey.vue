@@ -354,12 +354,13 @@ const addNewQuestion = async (surveyID) => {
   }
 };
 
-const editQuestion = async (questionIndex) => {
+const editQuestion = (questionIndex) => {
   errorMessage.value = "";
+  fetchData()
   state.tempForm.questionIndex =  questionIndex;
   state.tempForm.title =  state.survey.questions[questionIndex].title;
   state.tempForm.type =  state.survey.questions[questionIndex].type;
-  state.tempForm.options = await state.survey.questions[questionIndex].options;
+  state.tempForm.options = state.survey.questions[questionIndex].options;
   showModal.value = true;
 };
 

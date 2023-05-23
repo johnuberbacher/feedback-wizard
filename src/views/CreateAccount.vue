@@ -50,7 +50,7 @@
         class="block text-center text-red-600 font-semibold">
         {{ errorMessage }}
       </div>
-      <ButtonPrimary @click="createAccount" type="submit" class="w-full">
+      <ButtonPrimary type="submit" class="w-full">
         Create account
       </ButtonPrimary>
       <div class="text-center text-gray-500">
@@ -78,6 +78,8 @@ const errorMessage = ref();
 const router = useRouter();
 
 const createAccount = () => {
+  errorMessage.value = null; 
+  
   // Check that email and password are valid
   if (!isValidEmail(email.value)) {
     errorMessage.value = "Please enter a valid email address.";
