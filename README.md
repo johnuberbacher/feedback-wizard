@@ -5,17 +5,16 @@
 
 Feedback Wizard is a Vue 3 web application that allows users to provide feedback on different topics. It uses Firebase for authentication and data storage, and it includes Tailwind CSS for styling.
 
-## Demo
-Coming soon
+## Live Demo
+[https://feedback-wizard.netlify.app/](https://feedback-wizard.netlify.app/)
 
 ## Features
-- Create and customize feedback forms with ease
-- Share forms with your users via a generated link
-- Collect and track feedback from your users
-- View feedback data in real-time through the dashboard
-- Analyze feedback data with customizable charts and graphs
-- Receive email notifications when new feedback is submitted
-- Integration with Google Firebase Analytics for advanced user tracking and analysis
+- **Create and customize feedback forms with ease:** Easily create and customize feedback forms according to your specific needs. Define questions, layout, and design to align with your requirements.
+- **Share forms with your users via a generated link**: Generate unique links to share feedback forms with your users. They can conveniently access the form through the provided link.
+- **Forms feature multiple question types:** Support for various question types, including single and multiple-choice, text-input responses, and emotion-mood scale. Gather specific and diverse feedback from your users.
+- **Collect and track feedback from your users:** Collect and organize feedback responses from your users. Easily track and manage feedback data to capture valuable insights.
+- **View feedback data in real-time through the dashboard:** Access feedback data in real-time through an intuitive dashboard. Monitor responses as they come in and gain immediate insights into user sentiments, preferences, and opinions.
+- **Integration with Google Firebase Analytics:** Seamlessly integrate with Google Firebase Analytics. Leverage advanced user tracking and analysis capabilities to gain deeper insights into user behavior.
 
 ## Dependencies
 - Vue.js - A progressive JavaScript framework for building user interfaces.
