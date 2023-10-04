@@ -7,7 +7,7 @@
       >{{ props.label }}</label
     >
     <input
-      type="text"
+      :type="type ? type : 'text'"
       :id="props.modelValue"
       :placeholder="props.placeholder"
       :value="modelValue"

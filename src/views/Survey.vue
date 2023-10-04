@@ -18,7 +18,7 @@
         </div>
         <router-link
           to="/"
-          class="hidden md:block text-gray-700 dark:text-gray-400 hover:text-blue-800 dark:hover:text-blue-700 text-base cursor-pointer mt-4">
+          class="hidden md:block text-gray-700 dark:text-gray-400 hover:text-blue-800 hover:underline dark:hover:text-blue-700 text-base cursor-pointer mt-4">
           Made&nbsp;with&nbsp;<span class="font-medium"
             >🧙‍♂️&nbsp;FeedbackWizard</span
           >
@@ -160,7 +160,7 @@
         </div>
         <router-link
           to="/"
-          class="block md:hidden text-sm text-gray-700 dark:text-gray-400 hover:bg-blue-800 dark:hover:bg-blue-700 cursor-pointer mt-24">
+          class="block md:hidden text-sm text-gray-700 dark:text-gray-400 hover:text-blue-800 hover:underline dark:hover:text-blue-700 cursor-pointer mt-24">
           Made&nbsp;with&nbsp;<span class="font-medium"
             >🧙‍♂️&nbsp;FeedbackWizard</span
           >
@@ -286,7 +286,6 @@ onMounted(() => {
         if (!hasUpdatedViews.value) {
           updateSurveyViews(surveyCollectionRef);
 
-          // Set the flag to true so that we don't update the views again
           hasUpdatedViews.value = true;
         }
       } else {
@@ -298,7 +297,6 @@ onMounted(() => {
   }
 });
 
-// Define a function to update the "views" field
 const updateSurveyViews = async (surveyCollectionRef) => {
   try {
     // Get the current views array from the document

@@ -4,7 +4,7 @@
     <a
       href="https://github.com/johnuberbacher/feedback-wizard"
       target="_blank"
-      class="text-cyan-600 hover:text-cyan-500 font-medium underline transition-all transform"
+      class="text-blue-500 hover:text-blue-600 font-medium underline transition-all transform"
       >John Uberbacher</a
     >
   </div>

@@ -2,36 +2,20 @@
   <Navbar></Navbar>
   <div class="relative w-full m-auto max-w-sm max-h-full p-5 pt-10 md:pt-32">
     <!-- Modal content -->
-    <div class="font-semibold text-3xl mb-6">
+    <div class="font-semibold text-3xl mb-6 text-gray-900 dark:text-white">
       <span class="text-4xl -ml-2">🧙‍♂️</span>&nbsp;Login
     </div>
     <form class="space-y-6" @submit.prevent="createNewSurvey">
-      <div>
-        <label for="email" class="block text-gray-500 font-medium mb-2"
-          >Email address</label
-        >
-        <input
-          type="email"
-          name="email"
-          id="email"
-          v-model="email"
-          class="bg-white border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 block shadow w-full py-3 px-4"
-          placeholder="email@address.com"
-          required />
-      </div>
-      <div>
-        <label for="password" class="block text-gray-500 font-medium mb-2"
-          >Password</label
-        >
-        <input
-          type="password"
-          name="password"
-          id="password"
-          v-model="password"
-          class="bg-white border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 block shadow w-full py-3 px-4"
-          placeholder="**********"
-          required />
-      </div>
+      <InputText
+        label="Email address"
+        v-model="email"
+        type="type"
+        placeholder="email@address.com" />
+      <InputText
+        label="Password"
+        v-model="password"
+        type="password"
+        placeholder="********" />
       <div
         v-if="errorMessage"
         class="block text-center text-red-600 font-semibold">
@@ -44,7 +28,7 @@
         Don't have an account yet?
         <router-link
           to="/create-account"
-          class="text-cyan-600 hover:text-cyan-500 font-medium underline"
+          class="text-blue-500 hover:text-blue-600 font-medium underline"
           >Create one now.</router-link
         >
       </div>
@@ -62,6 +46,7 @@ import {
 } from "firebase/auth";
 import Navbar from "@/components/Navbar";
 import ButtonPrimary from "@/components/forms/ButtonPrimary";
+import InputText from "@/components/forms/InputText";
 
 const email = ref("");
 const password = ref("");

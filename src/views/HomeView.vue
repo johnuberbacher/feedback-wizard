@@ -2,7 +2,7 @@
   <div>
     <Navbar></Navbar>
     <div
-      class="w-full max-w-6xl mx-auto p-5 pt-10 md:py-32 flex flex-col items-center justify-center text-center gap-y-5 md:gap-y-10"
+      class="w-full max-w-6xl mx-auto p-5 pt-10 md:pt-32 flex flex-col items-center justify-center text-center gap-y-5 md:gap-y-10"
     >
       <h1 class="max-w-5xl text-3xl md:text-6xl font-bold text-gray-900 dark:text-white">
         Create surveys, gather perspectives and receive feedback from your
@@ -19,13 +19,13 @@
         <ButtonLight @click="router.push('/demo-survey')">Try Demo survey</ButtonLight>
       </div>
       <div
-        class="max-w-[80%] md:max-w-4xl w-full mx-auto mt-10 grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-10"
+        class="max-w-[80%] md:max-w-4xl w-full mx-auto grid grid-cols-2 mt-3 md:grid-cols-2 gap-4 md:gap-10"
       >
         <img
-          v-for="index in 6"
+          v-for="index in 4"
           :key="index"
           :src="require(`@/assets/img/preview${index}.png`)"
-          class="w-full h-auto mx-auto bg-white shadow rounded-lg"
+          class="w-full h-auto mx-auto bg-white border border-gray-200 dark:bg-gray-800 dark:border-gray-700 shadow rounded-lg "
         />
       </div>
     </div>

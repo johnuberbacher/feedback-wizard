@@ -341,7 +341,7 @@
       @close="showPanelViewResponse = false">
       <div class="flex flex-row items-start justify-between gap-4">
         <div
-          class="bg-cyan-600 rounded-full w-[44px] min-w-[44px] min-h-[44px] h-[44px] overflow-hidden flex items-center justify-center">
+          class="bg-blue-600 rounded-full w-[40px] min-w-[40px] min-h-[40px] h-[40px] overflow-hidden flex items-center justify-center ring-2 ring-blue-600">
           <i class="ri-user-fill text-[44px] mt-3 text-white"></i>
         </div>
         <div class="w-full flex flex-col items-start justify-start gap-y-2">
