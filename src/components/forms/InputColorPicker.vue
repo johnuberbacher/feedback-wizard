@@ -37,7 +37,7 @@
 
       <div
         v-show="state.isOpen"
-        class="origin-top-right absolute right-0 mt-2 w-40 shadow-md rounded-lg">
+        class="origin-top-right absolute right-0 mt-2 w-40 shadow rounded-lg">
         <div class="rounded-md bg-white shadow-xs px-4 py-3">
           <div class="flex flex-wrap -mx-2">
             <template v-for="(color, index) in state.colors" :key="index">

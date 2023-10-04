@@ -67,7 +67,7 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification  } from "firebase/auth";
 import Navbar from "@/components/Navbar";
 import ButtonPrimary from "@/components/forms/ButtonPrimary";
 
@@ -97,13 +97,20 @@ const createAccount = () => {
   // Create account
   createUserWithEmailAndPassword(getAuth(), email.value, password.value)
     .then((data) => {
-      router.push("/dashboard");
+      sendEmailVerification(getAuth().currentUser)
+        .then(() => {
+          // Email verification sent successfully
+          router.push("/dashboard");
+        })
+        .catch((error) => {
+          console.error("Failed to send email verification", error);
+        });
     })
     .catch((error) => {
       switch (error.code) {
         case "auth/email-already-in-use":
           errorMessage.value =
-            "Oops! It looks like that email address is already taken. Time to get creative and come up with a new one!";
+            "Oops! It looks like that email address is already taken. Time to get creative and come up with a new one! Make sure to verify your email address before signing in.";
           break;
         default:
           errorMessage.value =

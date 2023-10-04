@@ -3,5 +3,6 @@ module.exports = {
   purge: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
   theme: {},
   variants: {},
-  plugins: [],
+  plugins: ["prettier-plugin-tailwindcss"],
+  content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
 };

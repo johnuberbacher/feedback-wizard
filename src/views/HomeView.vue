@@ -4,11 +4,11 @@
     <div
       class="w-full max-w-6xl mx-auto p-5 pt-10 md:py-32 flex flex-col items-center justify-center text-center gap-y-5 md:gap-y-10"
     >
-      <h1 class="max-w-5xl text-3xl md:text-6xl font-bold text-gray-800">
+      <h1 class="max-w-5xl text-3xl md:text-6xl font-bold text-gray-900 dark:text-white">
         Create surveys, gather perspectives and receive feedback from your
         audience.
       </h1>
-      <p class="max-w-2xl">
+      <p class="max-w-2xl text-gray-700 dark:text-gray-300">
         Gain a deeper understanding of your audience by creating surveys and
         gathering their perspectives and feedback. This approach can help you
         identify opportunities for improvement and make data-driven decisions
@@ -25,7 +25,7 @@
           v-for="index in 6"
           :key="index"
           :src="require(`@/assets/img/preview${index}.png`)"
-          class="w-full h-auto mx-auto bg-white shadow-md rounded-lg"
+          class="w-full h-auto mx-auto bg-white shadow rounded-lg"
         />
       </div>
     </div>
