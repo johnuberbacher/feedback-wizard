@@ -20,7 +20,7 @@
         </svg>
         <span class="sr-only">Close modal</span>
       </button>
-      <div class="p-8 space-y-6">
+      <div class="p-4 md:p-8 space-y-4">
         <slot></slot>
       </div>
     </div>

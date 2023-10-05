@@ -5,12 +5,12 @@
     aria-hidden="true"
     class="after:content-[''] after:z-[-1] after:fixed after:top-0 after:right-0 after:bottom-0 after:left-0 after:bg-gray-900/50 fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-full max-h-full flex items-center justify-center">
     <div class="relative w-full m-auto max-w-sm max-h-full">
-      <div class="relative bg-white rounded-lg shadow">
+      <div class="relative bg-white border dark:border-gray-700 dark:bg-gray-800 rounded-lg shadow">
         <button
           @click="$emit('deleteSurveyModal')"
           type="button"
           class="absolute top-3 right-2.5 text-gray-500 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
-          <svg
+          <svg max-w-6xl mx-auto p-5 py-10 flex flex-col items-start justify-start gap-y-4
             aria-hidden="true"
             class="w-5 h-5"
             fill="currentColor"
@@ -24,11 +24,11 @@
           <span class="sr-only">Close modal</span>
         </button>
         <div class="p-10">
-          <div class="text-2xl font-medium mb-5 text-center">Heads up!</div>
-          <div class="font-base text-gray-600 mb-2 text-center">
+          <div class="font-semibold text-3xl text-gray-900 dark:text-white mb-5 text-center">Heads up!</div>
+          <div class="font-base text-gray-700 dark:text-gray-400 mb-2 text-center">
             Deleting a survey is a permanent action that cannot be undone.
           </div>
-          <div class="font-base text-gray-600 mb-5 text-center">
+          <div class="font-base text-gray-700 dark:text-gray-400 mb-5 text-center">
             Are
             you sure you want to proceed?
           </div>

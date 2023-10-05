@@ -9,8 +9,8 @@
         newSurveyTitle: newSurveyTitle,
         newSurveyDescription: newSurveyDescription,
         newSurveyCreator: newSurveyCreator,
-        newSurveyBackButton: newSurveyBackButton[0],
-        newSurveyCollectUserInfo: newSurveyCollectUserInfo[0],
+        newSurveyBackButton: newSurveyBackButton,
+        newSurveyCollectUserInfo: newSurveyCollectUserInfo,
       })
     ">
     <InputText
@@ -60,6 +60,6 @@ const newSurveyDescription = ref(null);
 const newSurveyCreator = ref(null);
 const newSurveyColor = ref(null);
 const newSurveyBackButton = ref(false);
-const newSurveyCollectUserInfo = ref(null);
+const newSurveyCollectUserInfo = ref(false);
 const props = defineProps(["errorMessage"]);
 </script>

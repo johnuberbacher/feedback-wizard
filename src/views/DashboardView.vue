@@ -17,7 +17,7 @@
             :stat="state.surveyViewsThisMonth"></StatCard>
           <StatCard
             description="Surveys responses this month"
-            :stat="`0`"></StatCard>
+            :stat="state.recentResponseList.length"></StatCard>
           <div
             class="col-span-1 md:col-span-1 w-full p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex flex-col items-center justify-center text-center">
             <div
@@ -125,6 +125,7 @@ const state = reactive({
   surveyList: [],
   responseList: [],
   recentSurveyList: [],
+  recentResponseList: [],
   createSurveyModal: false,
   surveyViewsThisMonth: 0,
 });
@@ -167,15 +168,40 @@ const fetchData = async () => {
       } else {
         // Handle surveys without creationDate here (if needed)
       }
+
+      // Assuming there is a property like `responses` for survey responses
+      if (survey.responses && Array.isArray(survey.responses)) {
+        for (const response of survey.responses) {
+          if (response.responseDate !== undefined) {
+            // Convert Firestore Timestamp to a JavaScript Date object
+            const responseDate = response.responseDate.toDate();
+
+            // Calculate the difference in days between the current date and response date
+            const timeDifference = Math.abs(currentDate - responseDate);
+            const daysDifference = Math.ceil(
+              timeDifference / (1000 * 60 * 60 * 24)
+            );
+
+            // Check if the response was received within 30 days
+            if (daysDifference <= 30) {
+              recentResponses.push(response);
+            }
+          } else {
+            // Handle responses without responseDate here (if needed)
+          }
+        }
+      }
     }
   }
 
   state.recentSurveyList = recentSurveys;
   state.surveyList = recentSurveys.concat(olderSurveys); // Combine older and recent surveys
   state.responseList = recentResponses;
+  state.recentResponseList = recentResponses;
 
   getDashboardSurveyStats();
 };
+
 
 const createNewSurveyModal = () => {
   state.createSurveyModal = !state.createSurveyModal;
